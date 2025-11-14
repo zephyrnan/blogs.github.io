@@ -7,7 +7,21 @@
       "Bash(npm run dev)",
       "Bash(cat \"F:/blogs/docs/.vuepress/config.js\")",
       "Bash(git init)",
-      "Bash(git add .)"
+      "Bash(git add .)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: VuePress 2.0 博客项目搭建完成\n\n- 完成 VuePress 2.0 框架搭建\n- 导入 12 篇技术文章\n- 配置海洋蓝主题和动态特效\n- 添加完整的项目文档\n- 配置部署脚本\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git remote add origin https://github.com/zephyrnan/zephyrnan.github.io.git)",
+      "Bash(git add deploy.sh)",
+      "Bash(git commit -m \"chore: configure deployment script for zephyrnan.github.io\")",
+      "Bash(git push -u origin main)",
+      "Bash(git push -f origin main)",
+      "Bash(git add docs/.vuepress/config.js docs/about.md)",
+      "Bash(git commit -m \"chore: update config and about page with personal information\n\n- Fix favicon path from /bg.png to /bg.jpg\n- Update GitHub link to https://github.com/zephyrnan\n- Update about page with correct links and information\n- Update last modified date\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(npm install vuepress-plugin-comment2@next)",
+      "Bash(npm install valine)",
+      "Bash(\"docs/posts/JavaScript 学习笔记.md\")",
+      "Bash(echo \"<ValineComment />\")",
+      "Bash(git add -A)",
+      "Bash(git commit -m \"feat: integrate Valine comment system\n\n- Install valine package\n- Create ValineComment.vue component with LeanCloud config\n- Add comment component to JavaScript article as example\n- Add VALINE-CONFIG.md documentation guide\n- Configure with AppID and AppKey\n\nFeatures:\n- Visitor counter\n- Markdown support\n- Emoji support\n- Code highlighting\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
     ],
     "deny": [],
     "ask": []
