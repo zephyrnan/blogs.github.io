@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node add-frontmatter.js)",
+      "Bash(nul)",
+      "Bash(npm run clean)",
+      "Bash(npm run dev)",
+      "Bash(cat \"F:/blogs/docs/.vuepress/config.js\")",
+      "Bash(git init)",
+      "Bash(git add .)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

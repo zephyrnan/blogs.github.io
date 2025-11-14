@@ -1,0 +1,62 @@
+// VuePress 2.0 海洋蓝色主题 - CSS 变量配置
+
+:root {
+  // ===== 品牌色（海洋蓝） =====
+  --c-brand: #1e88e5;
+  --c-brand-light: #42a5f5;
+  --c-brand-dark: #1565c0;
+
+  // ===== 背景色 =====
+  --c-bg: #ffffff;
+  --c-bg-light: #f0f9ff;
+  --c-bg-lighter: #fafcfe;
+  --c-bg-navbar: #667eea;
+  --c-bg-sidebar: #f0f9ff;
+
+  // ===== 文字颜色 =====
+  --c-text: #263238;
+  --c-text-light: #546e7a;
+  --c-text-lighter: #78909c;
+  --c-text-lightest: #b0bec5;
+
+  // ===== 边框 =====
+  --c-border: #b3e5fc;
+  --c-border-dark: #81d4fa;
+
+  // ===== 代码块 =====
+  --c-code-bg: #e1f5fe;
+  --c-code-text: #1565c0;
+
+  // ===== 提示框 =====
+  --c-tip: #00897b;
+  --c-warning: #ffa726;
+  --c-danger: #e53935;
+
+  // ===== 链接 =====
+  --c-text-accent: #1e88e5;
+}
+
+// 暗黑模式
+html.dark {
+  --c-brand: #42a5f5;
+  --c-brand-light: #64b5f6;
+  --c-brand-dark: #1e88e5;
+
+  --c-bg: #1a1a1a;
+  --c-bg-light: #252525;
+  --c-bg-lighter: #2d2d2d;
+  --c-bg-navbar: #1a237e;
+  --c-bg-sidebar: #1e1e1e;
+
+  --c-text: #e0e0e0;
+  --c-text-light: #b0b0b0;
+  --c-text-lighter: #808080;
+
+  --c-border: #3a3a3a;
+  --c-border-dark: #4a4a4a;
+
+  --c-code-bg: rgba(30, 136, 229, 0.2);
+  --c-code-text: #80cbc4;
+}
+
+
