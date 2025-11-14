@@ -24,14 +24,10 @@ git commit -m 'deploy: update blog'
 
 echo "🎉 准备推送到 GitHub..."
 
-# 如果发布到 https://<USERNAME>.github.io
-# git push -f git@github.com:<USERNAME>/<USERNAME>.github.io.git main
-
-# 如果发布到 https://<USERNAME>.github.io/<REPO>
-# 请将下面的 <USERNAME> 和 <REPO> 替换为你的 GitHub 用户名和仓库名
-# git push -f git@github.com:<USERNAME>/<REPO>.git main:gh-pages
+# 发布到 https://zephyrnan.github.io
+git push -f https://github.com/zephyrnan/zephyrnan.github.io.git main
 
 echo "✅ 部署完成！"
-echo "📝 提示：请取消注释并配置 git push 命令"
+echo "🌐 访问：https://zephyrnan.github.io"
 
 cd -
