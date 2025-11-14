@@ -21,7 +21,8 @@
       "Bash(\"docs/posts/JavaScript 学习笔记.md\")",
       "Bash(echo \"<ValineComment />\")",
       "Bash(git add -A)",
-      "Bash(git commit -m \"feat: integrate Valine comment system\n\n- Install valine package\n- Create ValineComment.vue component with LeanCloud config\n- Add comment component to JavaScript article as example\n- Add VALINE-CONFIG.md documentation guide\n- Configure with AppID and AppKey\n\nFeatures:\n- Visitor counter\n- Markdown support\n- Emoji support\n- Code highlighting\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
+      "Bash(git commit -m \"feat: integrate Valine comment system\n\n- Install valine package\n- Create ValineComment.vue component with LeanCloud config\n- Add comment component to JavaScript article as example\n- Add VALINE-CONFIG.md documentation guide\n- Configure with AppID and AppKey\n\nFeatures:\n- Visitor counter\n- Markdown support\n- Emoji support\n- Code highlighting\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(git commit -m \"feat: add Baidu Analytics configuration\n\n- Add BAIDU-ANALYTICS-CONFIG.md documentation\n- Update config.js with Baidu Analytics placeholder\n- Provide step-by-step setup guide\n\nUser needs to:\n1. Register at tongji.baidu.com\n2. Get Analytics ID\n3. Replace YOUR_BAIDU_ANALYTICS_ID in config.js\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
     ],
     "deny": [],
     "ask": []
