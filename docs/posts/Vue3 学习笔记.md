@@ -3100,3 +3100,9 @@ onErrorCaptured((err, instance, info) => {
 > - [Pinia](https://pinia.vuejs.org/zh/)
 > - [Vite](https://cn.vitejs.dev/)
 > - [Vue 风格指南](https://cn.vuejs.org/style-guide/)
+
+## 💬 评论交流
+
+有任何问题或建议，欢迎在下方留言交流！
+
+<ValineComment />

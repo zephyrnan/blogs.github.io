@@ -1491,3 +1491,9 @@ class Ajax {
 > - [MDN - XMLHttpRequest](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest)
 > - [MDN - 使用 Fetch](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch)
 > - [AJAX 教程 - W3School](https://www.w3school.com.cn/ajax/index.asp)
+
+## 💬 评论交流
+
+有任何问题或建议，欢迎在下方留言交流！
+
+<ValineComment />
