@@ -22,7 +22,19 @@
       "Bash(echo \"<ValineComment />\")",
       "Bash(git add -A)",
       "Bash(git commit -m \"feat: integrate Valine comment system\n\n- Install valine package\n- Create ValineComment.vue component with LeanCloud config\n- Add comment component to JavaScript article as example\n- Add VALINE-CONFIG.md documentation guide\n- Configure with AppID and AppKey\n\nFeatures:\n- Visitor counter\n- Markdown support\n- Emoji support\n- Code highlighting\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
-      "Bash(git commit -m \"feat: add Baidu Analytics configuration\n\n- Add BAIDU-ANALYTICS-CONFIG.md documentation\n- Update config.js with Baidu Analytics placeholder\n- Provide step-by-step setup guide\n\nUser needs to:\n1. Register at tongji.baidu.com\n2. Get Analytics ID\n3. Replace YOUR_BAIDU_ANALYTICS_ID in config.js\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
+      "Bash(git commit -m \"feat: add Baidu Analytics configuration\n\n- Add BAIDU-ANALYTICS-CONFIG.md documentation\n- Update config.js with Baidu Analytics placeholder\n- Provide step-by-step setup guide\n\nUser needs to:\n1. Register at tongji.baidu.com\n2. Get Analytics ID\n3. Replace YOUR_BAIDU_ANALYTICS_ID in config.js\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(git push origin main)",
+      "Bash(git add OPTIMIZATION-COMPLETE.md)",
+      "Bash(git commit -m \"docs: add optimization completion report\")",
+      "Bash(sh deploy.sh)",
+      "Bash(for file in \"docs/posts/TypeScript 快速上手.md\" \"docs/posts/Vue3 学习笔记.md\" \"docs/posts/HTML5 与 CSS 综合学习笔记.md\" \"docs/posts/CSS 属性速查手册.md\" \"docs/posts/AJAX 学习笔记.md\" \"docs/posts/Promise 学习笔记.md\" \"docs/posts/Axios完整学习笔记.md\" \"docs/posts/Node.js 学习笔记.md\" \"docs/posts/SpringBoot 完整学习笔记.md\" \"docs/posts/GitHub新手完全指南.md\")",
+      "Bash(do)",
+      "Bash(\"$file\")",
+      "Bash(done)",
+      "Bash(git add docs/posts/)",
+      "Bash(git commit -m \"feat: add comment component to all 12 articles\n\n- Add Valine comment section to all blog posts\n- Include comment prompt message\n- Enable user interaction on all articles\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(git pull origin main --no-rebase)",
+      "Bash(git commit -m \"fix: improve Valine comment component with debug info\n\n- Add visual confirmation when component loads\n- Add detailed console logging\n- Show error messages if loading fails  \n- Better error handling and user feedback\n- Add troubleshooting documentation\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
     ],
     "deny": [],
     "ask": []
