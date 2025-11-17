@@ -8,6 +8,7 @@
 <script setup>
 import { onMounted, watch } from 'vue'
 import { usePageData } from '@vuepress/client'
+import Valine from 'valine'
 
 const page = usePageData()
 
@@ -18,14 +19,11 @@ const initValine = () => {
     return
   }
 
-  console.log('🔄 开始初始化 Valine 评论系统...')
+  console.log('🔄 开始初始化 Valine 评论系��...')
   console.log('📍 当前页面路径:', page.value.path)
 
   try {
-    // 动态导入 Valine
-    const Valine = require('valine')
-
-    console.log('📦 Valine 模块加载成功')
+    console.log('📦 Valine 模块已导入')
 
     // Valine 配置
     new Valine({
@@ -55,14 +53,14 @@ const initValine = () => {
       el.innerHTML = `
         <div style="padding: 20px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 5px; color: #856404;">
           <h4>⚠️ 评论系统加载失败</h4>
-          <p>错误信息：${error.message}</p>
+          <p><strong>错误信息：</strong>${error.message}</p>
           <p><strong>可能的原因：</strong></p>
           <ol>
             <li>LeanCloud 安全域名未配置（最常见）</li>
-            <li>网络连接问题</li>
+            <li>网络连接���题</li>
             <li>AppID 或 AppKey 配置错误</li>
           </ol>
-          <p>请查看浏览器控制台（F12）获取详细错误信息，或参考 <a href="https://github.com/zephyrnan/zephyrnan.github.io/blob/main/COMMENT-TROUBLESHOOTING.md" target="_blank">评论系统排查指南</a></p>
+          <p>请查看浏览器控制台（F12）获取详细错误信息</p>
         </div>
       `
     }
