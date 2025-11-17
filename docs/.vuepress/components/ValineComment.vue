@@ -8,22 +8,24 @@
 <script setup>
 import { onMounted, watch } from 'vue'
 import { usePageData } from '@vuepress/client'
-import Valine from 'valine'
 
 const page = usePageData()
 
-const initValine = () => {
+const initValine = async () => {
   // 检查是否在浏览器环境
   if (typeof window === 'undefined') {
     console.log('服务端渲染环境，跳过 Valine 初始化')
     return
   }
 
-  console.log('🔄 开始初始化 Valine 评论系��...')
+  console.log('🔄 开始初始化 Valine 评论系统...')
   console.log('📍 当前页面路径:', page.value.path)
 
   try {
-    console.log('📦 Valine 模块已导入')
+    // 动态导入 Valine（只在浏览器环境中）
+    const Valine = (await import('valine')).default
+
+    console.log('📦 Valine 模块加载成功')
 
     // Valine 配置
     new Valine({
@@ -47,7 +49,7 @@ const initValine = () => {
     console.error('❌ Valine 初始化失败:', error)
     console.error('错误详情:', error.message)
 
-    // 在页面上显示错误信息
+    // ��页面上显示错误信息
     const el = document.getElementById('vcomments')
     if (el) {
       el.innerHTML = `
@@ -57,7 +59,7 @@ const initValine = () => {
           <p><strong>可能的原因：</strong></p>
           <ol>
             <li>LeanCloud 安全域名未配置（最常见）</li>
-            <li>网络连接���题</li>
+            <li>网络连接问题</li>
             <li>AppID 或 AppKey 配置错误</li>
           </ol>
           <p>请查看浏览器控制台（F12）获取详细错误信息</p>
