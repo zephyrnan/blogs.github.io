@@ -1,6 +1,7 @@
 import { viteBundler } from '@vuepress/bundler-vite'
 import { defaultTheme } from '@vuepress/theme-default'
 import { defineUserConfig } from 'vuepress'
+import { searchPlugin } from '@vuepress/plugin-search'
 
 export default defineUserConfig({
   lang: 'zh-CN',
@@ -13,7 +14,7 @@ export default defineUserConfig({
   // 网站图标配置
   head: [
     ['link', { rel: 'icon', href: '/bg.jpg' }],
-    
+
     // 百度统计（已临时禁用以消除错误）
     // 如需启用，请取消下方注释并替换 YOUR_BAIDU_ANALYTICS_ID
     // 获取方法见：BAIDU-ANALYTICS-CONFIG.md
@@ -29,6 +30,24 @@ export default defineUserConfig({
   ],
 
   bundler: viteBundler(),
+
+  // 插件配置
+  plugins: [
+    searchPlugin({
+      // 搜索框占位符
+      locales: {
+        '/': {
+          placeholder: '搜索文档',
+        },
+      },
+      // 最大搜索建议数
+      maxSuggestions: 10,
+      // 排除首页
+      isSearchable: (page) => page.path !== '/',
+      // 允许搜索 Frontmatter 中的 tags
+      getExtraFields: (page) => page.frontmatter.tags ?? [],
+    }),
+  ],
 
   theme: defaultTheme({
     logo: '/author.jpg',
@@ -80,7 +99,6 @@ export default defineUserConfig({
           text: '开发工具',
           children: [
             '/posts/GitHub新手完全指南.md',
-            '/posts/个人博客搭建指南.md',
             '/posts/个人博客搭建指南.md',
           ],
         },
