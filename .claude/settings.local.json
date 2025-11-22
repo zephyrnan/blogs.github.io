@@ -39,7 +39,19 @@
       "Bash(git push origin source)",
       "Bash(git commit -m \"fix: update year to 2025 in documentation\")",
       "Bash(git add .claude/settings.local.json)",
-      "Bash(git commit -m \"chore: update Claude Code settings with new allowed commands\n\n- Add recent git commands to allowedCommands list\n- Include documentation update and deployment commands\n- Update settings for better workflow automation\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")"
+      "Bash(git commit -m \"chore: update Claude Code settings with new allowed commands\n\n- Add recent git commands to allowedCommands list\n- Include documentation update and deployment commands\n- Update settings for better workflow automation\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(cat \"docs/.vuepress/config.js\")",
+      "Bash(cat docs/.vuepress/config.js)",
+      "Bash(git add \"docs/posts/个人博客搭建指南.md\" docs/.vuepress/config.js docs/posts/README.md)",
+      "Bash(git commit -m \"docs: add comprehensive blog setup guide to tools category\n\n- Add 个人博客搭建指南.md with detailed VuePress tutorial\n- Cover environment setup, step-by-step instructions\n- Include content creation guide and feature extensions  \n- Add deployment strategies and SEO optimization\n- Update sidebar config to include new guide\n- Add post card in tools section navigation\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(git restore docs/.vuepress/config.js docs/posts/README.md)",
+      "Bash(git commit -m \"fix: resolve Vite import errors in blog setup guide\n\n- Replace example image paths with placeholders\n- Remove non-existent article links to avoid 404\n- Fix dynamic import resolution issues\n- Tested successfully on dev server\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(npm install -D @vuepress/plugin-search@next)",
+      "Bash(git add docs/.vuepress/config.js docs/posts/README.md package.json package-lock.json)",
+      "Bash(git commit -m \"feat: add search functionality and fix duplicate card\n\n- Install @vuepress/plugin-search plugin\n- Configure search with Chinese placeholder ''搜索文档''\n- Set max suggestions to 10 results\n- Exclude homepage from search\n- Enable tag searching from frontmatter\n- Fix duplicate ''个人博客搭建指南'' card in README\n\nSearch Features:\n- 🔍 Full-text search across all articles\n- 📝 Search by tags and keywords\n- 🎯 Smart search suggestions (max 10)\n- 📱 Mobile-friendly search interface\n- ⚡ Real-time search results\n\nBug Fixes:\n- Remove duplicate blog setup guide card from tools section\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(git add 博客指南.md)",
+      "Bash(git commit -m \"docs: update blog guide with search feature info\n\n- Add search functionality section to latest updates\n- Update article count from 12 to 13\n- Add search plugin to project status\n- Document search features and configuration\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\")",
+      "Bash(git pull origin source)"
     ],
     "deny": [],
     "ask": []

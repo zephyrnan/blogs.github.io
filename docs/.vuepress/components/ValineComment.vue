@@ -32,7 +32,7 @@ const initValine = async () => {
       el: '#vcomments',
       appId: 'sLLFTcoWHCJVJOdd9UsscnGE-gzGzoHsz', // LeanCloud AppID
       appKey: 'NcwfyGUEwWLSt8fu7uCcglXC', // LeanCloud AppKey
-      placeholder: '留下你的评论吧~ 支��� Markdown 语法',
+      placeholder: '留下你的评论吧~ 支持 Markdown 语法',
       avatar: 'robohash',
       pageSize: 10,
       visitor: true, // 文章访问量统计
@@ -49,7 +49,7 @@ const initValine = async () => {
     console.error('❌ Valine 初始化失败:', error)
     console.error('错误详情:', error.message)
 
-    // ��页面上显示错误信息
+    // 在页面上显示错误信息
     const el = document.getElementById('vcomments')
     if (el) {
       el.innerHTML = `

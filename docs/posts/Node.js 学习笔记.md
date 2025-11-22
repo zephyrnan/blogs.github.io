@@ -1,13 +1,3 @@
----
-title: Node.js 学习笔记
-date: 2024-01-12
-categories:
-  - 前端
-tags:
-  - Node.js
-  - JavaScript
----
-
 # Node.js 学习笔记
 
 [Node.js 官方文档](https://nodejs.org/zh-cn/docs/)
@@ -121,33 +111,175 @@ Node.js 使用 CommonJS 模块规范
 // math.js
 
 // 方式1：exports 导出
-exports.add = function(a, b) {
-    return a + b;
+exports.add = function(a, b) {  // exports是module.exports的引用,通过点语法添加属性
+    return a + b;  // 导出的函数可以在其他模块中通过require引入使用
 };
 
-exports.subtract = function(a, b) {
+exports.subtract = function(a, b) {  // 可以多次使用exports添加多个导出
     return a - b;
 };
 
 // 方式2：module.exports 导出（推荐）
-module.exports = {
-    add: (a, b) => a + b,
-    subtract: (a, b) => a - b,
-    multiply: (a, b) => a * b
+module.exports = {  // 直接给module.exports赋值一个对象
+    add: (a, b) => a + b,  // 使用ES6箭头函数简写
+    subtract: (a, b) => a - b,  // 所有属性都会被导出
+    multiply: (a, b) => a * b  // 这种方式更清晰,一次性导出所有接口
 };
 
 // 导出单个函数
-module.exports = function(a, b) {
-    return a + b;
+module.exports = function(a, b) {  // 直接导出一个函数,而不是对象
+    return a + b;  // 导入时得到的就是这个函数本身
 };
 
 // 导出类
-module.exports = class Calculator {
-    add(a, b) {
-        return a + b;
+module.exports = class Calculator {  // 导出一个类定义
+    add(a, b) {  // 类的方法
+        return a + b;  // 导入后可以new这个类来创建实例
     }
 };
 ```
+
+> 📊 **运行效果**:
+> ```javascript
+> // 方式1的导出结果
+> // module.exports = { add: [Function], subtract: [Function] }
+>
+> // 方式2的导出结果
+> // module.exports = { add: [Function], subtract: [Function], multiply: [Function] }
+>
+> // 导出单个函数的结果
+> // module.exports = [Function]
+>
+> // 导出类的结果
+> // module.exports = [class Calculator]
+> ```
+>
+> ⚠️ **注意事项**:
+> - **方式选择**: 推荐使用`module.exports = {}`统一导出,避免混用exports和module.exports
+> - **覆盖问题**: `module.exports = xxx`会覆盖之前所有的导出,包括exports添加的属性
+> - **引用断开**: 直接给exports赋值(`exports = {}`)会断开与module.exports的引用,导出失败
+> - **单次导出**: 一个模块中多次使用`module.exports = xxx`会相互覆盖,只有最后一次生效
+> - **导出时机**: 导出语句的执行顺序很重要,后面的赋值会覆盖前面的
+>
+> ```javascript
+> // 常见错误:混用exports和module.exports
+> exports.add = () => {};
+> module.exports = { subtract: () => {} };  // ❌ add丢失,只导出subtract
+>
+> // 正确做法:统一使用module.exports
+> module.exports = {
+>   add: () => {},
+>   subtract: () => {}
+> };  // ✅ 两个函数都被导出
+>
+> // 常见错误:给exports直接赋值
+> exports = { add: () => {} };  // ❌ 断开引用,导出失败
+>
+> // 正确做法:使用点语法或module.exports
+> exports.add = () => {};  // ✅ 正确
+> module.exports = { add: () => {} };  // ✅ 正确
+>
+> // 常见错误:多次覆盖导出
+> module.exports = { add: () => {} };
+> module.exports = { subtract: () => {} };  // ❌ add丢失
+>
+> // 正确做法:一次性导出所有内容
+> module.exports = {
+>   add: () => {},
+>   subtract: () => {}
+> };  // ✅ 所有函数都导出
+> ```
+>
+> 🎯 **实际应用场景**:
+> ```javascript
+> // 场景1:工具函数库导出
+> // utils/format.js
+> module.exports = {
+>   formatDate: (date) => date.toISOString().split('T')[0],
+>   formatCurrency: (amount) => `¥${amount.toFixed(2)}`,
+>   formatPhone: (phone) => phone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
+> };
+>
+> // 使用
+> const { formatDate, formatCurrency } = require('./utils/format');
+> console.log(formatDate(new Date()));  // "2025-07-23"
+> console.log(formatCurrency(99.99));   // "¥99.99"
+>
+> // 场景2:配置文件导出
+> // config/database.js
+> module.exports = {
+>   development: {
+>     host: 'localhost',
+>     port: 3306,
+>     database: 'dev_db'
+>   },
+>   production: {
+>     host: process.env.DB_HOST,
+>     port: process.env.DB_PORT,
+>     database: process.env.DB_NAME
+>   }
+> };
+>
+> // 使用
+> const dbConfig = require('./config/database');
+> const config = dbConfig[process.env.NODE_ENV || 'development'];
+>
+> // 场景3:中间件导出(Express)
+> // middlewares/auth.js
+> module.exports = function(req, res, next) {
+>   const token = req.headers.authorization;
+>   if (!token) {
+>     return res.status(401).json({ error: 'No token provided' });
+>   }
+>   // 验证token...
+>   next();
+> };
+>
+> // 使用
+> const auth = require('./middlewares/auth');
+> app.use('/api', auth);
+>
+> // 场景4:类导出(数据模型)
+> // models/User.js
+> module.exports = class User {
+>   constructor(name, email) {
+>     this.name = name;
+>     this.email = email;
+>     this.createdAt = new Date();
+>   }
+>
+>   save() {
+>     // 保存到数据库...
+>   }
+>
+>   static findById(id) {
+>     // 从数据库查询...
+>   }
+> };
+>
+> // 使用
+> const User = require('./models/User');
+> const user = new User('张三', 'zhangsan@example.com');
+> user.save();
+>
+> // 场景5:单例模式导出(数据库连接)
+> // db/connection.js
+> const mysql = require('mysql');
+> const pool = mysql.createPool({
+>   host: 'localhost',
+>   user: 'root',
+>   password: 'password',
+>   database: 'mydb'
+> });
+>
+> module.exports = pool;  // 导出连接池实例
+>
+> // 使用(多处require得到同一个实例)
+> const db = require('./db/connection');
+> db.query('SELECT * FROM users', (err, results) => {
+>   // 处理结果...
+> });
+> ```
 
 **导入模块**
 
@@ -155,20 +287,175 @@ module.exports = class Calculator {
 // app.js
 
 // 导入内置模块
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs');  // require返回模块导出的内容,内置模块无需路径
+const path = require('path');  // Node.js会自动从核心模块中查找
 
 // 导入自定义模块
-const math = require('./math');  // 相对路径
-const utils = require('./utils/index');  // 可以省略 index.js
+const math = require('./math');  // 相对路径,./表示当前目录,require会自动添加.js扩展名
+const utils = require('./utils/index');  // 可以省略 index.js,Node.js会自动查找index.js
 
 // 导入第三方模块
-const express = require('express');
-const axios = require('axios');
+const express = require('express');  // 从node_modules目录查找,无需路径前缀
+const axios = require('axios');  // 第三方模块需要先通过npm install安装
 
 // 使用模块
-console.log(math.add(1, 2));  // 3
+console.log(math.add(1, 2));  // 3,调用导入模块的方法
 ```
+
+> 📊 **运行效果**:
+> ```javascript
+> // 内置模块导入
+> // fs = { readFile: [Function], writeFile: [Function], ... }
+> // path = { join: [Function], resolve: [Function], ... }
+>
+> // 自定义模块导入
+> // math = { add: [Function], subtract: [Function], multiply: [Function] }
+>
+> // 第三方模块导入
+> // express = [Function: createApplication]
+> // axios = { get: [Function], post: [Function], ... }
+>
+> // 调用结果
+> // 输出: 3
+> ```
+>
+> ⚠️ **注意事项**:
+> - **路径前缀**: 自定义模块必须使用`./`或`../`开头,否则会被当作第三方模块查找
+> - **扩展名省略**: require会按`.js` → `.json` → `.node`顺序自动查找扩展名
+> - **模块缓存**: require的模块会被缓存,多次require同一模块只执行一次
+> - **同步加载**: require是同步的,会阻塞代码执行,直到模块加载完成
+> - **循环依赖**: 两个模块相互引用会导致循环依赖,需要重构代码避免
+> - **路径解析**: require会从当前目录开始查找,逐级向上查找node_modules目录
+>
+> ```javascript
+> // 常见错误:忘记路径前缀
+> const math = require('math');  // ❌ 会从node_modules查找,找不到
+>
+> // 正确做法:添加相对路径
+> const math = require('./math');  // ✅ 从当前目录查找
+>
+> // 常见错误:路径写错
+> const utils = require('./util');  // ❌ 如果文件名是utils.js会找不到
+>
+> // 正确做法:确认文件名
+> const utils = require('./utils');  // ✅ 文件名必须匹配
+>
+> // 常见错误:第三方模块未安装
+> const express = require('express');  // ❌ 如果未npm install会报错
+>
+> // 正确做法:先安装再使用
+> // npm install express
+> const express = require('express');  // ✅ 安装后可以导入
+>
+> // 解构导入
+> const { readFile, writeFile } = require('fs');  // ✅ 只导入需要的方法
+>
+> // 导入并重命名
+> const myMath = require('./math');  // ✅ 可以自定义变量名
+>
+> // 条件导入(动态require)
+> let db;
+> if (process.env.NODE_ENV === 'production') {
+>   db = require('./db-prod');  // ✅ 根据环境加载不同模块
+> } else {
+>   db = require('./db-dev');
+> }
+> ```
+>
+> 🎯 **实际应用场景**:
+> ```javascript
+> // 场景1:Express应用入口文件
+> // app.js
+> const express = require('express');  // Web框架
+> const bodyParser = require('body-parser');  // 请求体解析
+> const cors = require('cors');  // 跨域中间件
+> const routes = require('./routes');  // 自定义路由模块
+> const config = require('./config');  // 配置文件
+>
+> const app = express();
+> app.use(bodyParser.json());
+> app.use(cors());
+> app.use('/api', routes);
+>
+> app.listen(config.port, () => {
+>   console.log(`Server running on port ${config.port}`);
+> });
+>
+> // 场景2:工具函数按需导入
+> // controller.js
+> const { formatDate, formatCurrency } = require('./utils/format');
+> const { validateEmail, validatePhone } = require('./utils/validation');
+>
+> function createUser(req, res) {
+>   const { name, email, phone } = req.body;
+>
+>   if (!validateEmail(email)) {
+>     return res.status(400).json({ error: 'Invalid email' });
+>   }
+>
+>   if (!validatePhone(phone)) {
+>     return res.status(400).json({ error: 'Invalid phone' });
+>   }
+>
+>   // 创建用户...
+> }
+>
+> // 场景3:数据库连接模块
+> // services/userService.js
+> const db = require('../db/connection');  // 向上查找目录
+> const User = require('../models/User');  // 用户模型
+>
+> class UserService {
+>   async findAll() {
+>     return await db.query('SELECT * FROM users');
+>   }
+>
+>   async create(userData) {
+>     const user = new User(userData);
+>     return await user.save();
+>   }
+> }
+>
+> module.exports = new UserService();
+>
+> // 场景4:环境配置动态加载
+> // config/index.js
+> const env = process.env.NODE_ENV || 'development';
+> const config = require(`./${env}`);  // 动态路径拼接
+>
+> module.exports = config;
+>
+> // config/development.js
+> module.exports = {
+>   port: 3000,
+>   database: 'mongodb://localhost:27017/dev'
+> };
+>
+> // config/production.js
+> module.exports = {
+>   port: process.env.PORT,
+>   database: process.env.DATABASE_URL
+> };
+>
+> // 场景5:路由模块化
+> // routes/index.js
+> const express = require('express');
+> const router = express.Router();
+>
+> const userRoutes = require('./users');  // 用户路由
+> const postRoutes = require('./posts');  // 文章路由
+> const authRoutes = require('./auth');   // 认证路由
+>
+> router.use('/users', userRoutes);
+> router.use('/posts', postRoutes);
+> router.use('/auth', authRoutes);
+>
+> module.exports = router;
+>
+> // app.js中使用
+> const routes = require('./routes');
+> app.use('/api', routes);
+> ```
 
 **exports 和 module.exports 的区别**
 
@@ -2473,9 +2760,3 @@ app.use(helmet());
 > - [Express 官方文档](https://expressjs.com/)
 > - [NPM 官网](https://www.npmjs.com/)
 > - [Node.js 最佳实践](https://github.com/goldbergyoni/nodebestpractices)
-
-## 💬 评论交流
-
-有任何问题或建议，欢迎在下方留言交流！
-
-<ValineComment />

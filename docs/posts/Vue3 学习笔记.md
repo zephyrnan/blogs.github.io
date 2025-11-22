@@ -1,13 +1,3 @@
----
-title: Vue3 学习笔记
-date: 2024-01-12
-categories:
-  - 前端
-tags:
-  - Vue3
-  - JavaScript
----
-
 # Vue3 学习笔记
 
 [🪩 尚硅谷Vue3入门到实战，最新版vue3+TypeScript前端开发教程](https://www.bilibili.com/video/BV1Za4y1r7KE)
@@ -154,6 +144,21 @@ vue create my-vue-app
 </html>
 ```
 
+// 效果: 页面显示 "Hello Vue3!" 的标题
+
+> ⚠️ **注意事项**:
+> - CDN方式仅适用于学习和原型开发，生产环境建议使用构建工具
+> - 需要网络连接才能加载Vue库
+> - 不支持单文件组件(.vue文件)
+> - 性能不如构建后的版本
+
+> 🎯 **实际应用场景**:
+> ```html
+> <!-- 场景1: 快速原型验证 -->
+> <!-- 场景2: 为现有页面添加交互功能 -->
+> <!-- 场景3: 学习Vue基础概念 -->
+> ```
+
 ### 4. main.js 入口文件
 
 ```js
@@ -292,6 +297,59 @@ export default {
 - `v-if`：真正的条件渲染，会销毁和重建 DOM，有更高的切换开销
 - `v-show`：只是 CSS display 的切换，有更高的初始渲染开销
 - 频繁切换用 `v-show`，运行时条件很少改变用 `v-if`
+
+> ⚠️ **注意事项**:
+> - **v-if 是惰性的**:如果初始条件为false,则不会渲染
+> - **v-show 总是会渲染**:只是用CSS隐藏,DOM始终存在
+> - **v-if 可以配合 v-else**:v-show不能
+> - **v-if 有更高的切换成本**:每次都要销毁/重建DOM
+> - **v-show 有更高的初始成本**:无论条件如何都会渲染
+>
+> ```vue
+> <!-- 性能对比示例 -->
+> <template>
+>     <!-- 频繁切换(如tab切换):使用v-show -->
+>     <div v-show="activeTab === 'tab1'">Tab 1 内容</div>
+>     <div v-show="activeTab === 'tab2'">Tab 2 内容</div>
+>
+>     <!-- 很少改变(如权限控制):使用v-if -->
+>     <div v-if="user.isAdmin">管理员面板</div>
+>     <div v-if="user.isPremium">高级功能</div>
+>
+>     <!-- v-if适合条件渲染+懒加载 -->
+>     <HeavyComponent v-if="showHeavy" />
+> </template>
+> ```
+
+> 🎯 **实际应用场景**:
+> ```vue
+> <!-- 场景1:Tab切换(频繁) - 使用v-show -->
+> <template>
+>     <div class="tabs">
+>         <button @click="tab = 'home'">首页</button>
+>         <button @click="tab = 'profile'">个人</button>
+>         <button @click="tab = 'settings'">设置</button>
+>     </div>
+>     <div v-show="tab === 'home'">首页内容</div>
+>     <div v-show="tab === 'profile'">个人内容</div>
+>     <div v-show="tab === 'settings'">设置内容</div>
+> </template>
+>
+> <!-- 场景2:权限控制(不常变) - 使用v-if -->
+> <template>
+>     <nav>
+>         <router-link to="/">首页</router-link>
+>         <router-link v-if="isLoggedIn" to="/dashboard">控制台</router-link>
+>         <router-link v-if="isAdmin" to="/admin">管理</router-link>
+>     </nav>
+> </template>
+>
+> <!-- 场景3:条件加载组件 - 使用v-if避免初始渲染 -->
+> <template>
+>     <button @click="showModal = true">打开弹窗</button>
+>     <Modal v-if="showModal" @close="showModal = false" />
+> </template>
+> ```
 
 ### 5. 列表渲染
 
@@ -3100,9 +3158,3 @@ onErrorCaptured((err, instance, info) => {
 > - [Pinia](https://pinia.vuejs.org/zh/)
 > - [Vite](https://cn.vitejs.dev/)
 > - [Vue 风格指南](https://cn.vuejs.org/style-guide/)
-
-## 💬 评论交流
-
-有任何问题或建议，欢迎在下方留言交流！
-
-<ValineComment />

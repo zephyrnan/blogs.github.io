@@ -1,13 +1,3 @@
----
-title: Promise 学习笔记
-date: 2024-01-12
-categories:
-  - 前端
-tags:
-  - Promise
-  - JavaScript
----
-
 # Promise 学习笔记
 
 ## 前言
@@ -147,6 +137,55 @@ timeDelay(2000)
     );
 ```
 
+> ⚠️ **注意事项**:
+> - Promise 构造函数中的代码是同步执行的,只有异步操作(setTimeout)是异步的
+> - resolve/reject 只能调用一次,多次调用无效
+> - Promise 一旦状态改变就不可逆转
+>
+> ```js
+> // 错误示例:多次调用resolve
+> new Promise((resolve, reject) => {
+>     resolve('第一次');
+>     resolve('第二次');  // 无效,被忽略
+> }).then(value => console.log(value));  // 输出: '第一次'
+> ```
+
+> 🎯 **实际应用场景**:
+> ```js
+> // 场景1:延迟加载组件
+> function loadComponentAfter(ms) {
+>     return new Promise(resolve => {
+>         setTimeout(() => {
+>             import('./MyComponent.js').then(resolve);
+>         }, ms);
+>     });
+> }
+>
+> // 场景2:模拟网络请求延迟
+> async function mockAPI(data, delay = 1000) {
+>     return new Promise(resolve => {
+>         setTimeout(() => resolve(data), delay);
+>     });
+> }
+>
+> // 场景3:重试机制
+> function retryWithDelay(fn, maxRetries = 3, delay = 1000) {
+>     return new Promise((resolve, reject) => {
+>         let retries = 0;
+>         const attempt = () => {
+>             fn().then(resolve).catch(err => {
+>                 if (++retries >= maxRetries) {
+>                     reject(err);
+>                 } else {
+>                     setTimeout(attempt, delay);
+>                 }
+>             });
+>         };
+>         attempt();
+>     });
+> }
+> ```
+
 **案例二：封装 AJAX 请求**
 
 ```js
@@ -181,6 +220,86 @@ promiseAjax('https://api.example.com/data')
         error => console.error('获取数据失败:', error)
     );
 ```
+
+> ⚠️ **注意事项**:
+> - 需要处理 JSON 解析可能的异常
+> - 应该设置超时机制防止请求挂起
+> - 建议添加请求头和错误详情
+> - 现代项目推荐使用 fetch 或 axios 而非手写 XMLHttpRequest
+>
+> ```js
+> // 改进版本:添加超时和错误处理
+> function promiseAjaxImproved(url, timeout = 5000) {
+>     return new Promise((resolve, reject) => {
+>         const xhr = new XMLHttpRequest();
+>         xhr.timeout = timeout;
+>
+>         xhr.ontimeout = () => reject(new Error('请求超时'));
+>         xhr.onerror = () => reject(new Error('网络错误'));
+>
+>         xhr.onload = () => {
+>             if (xhr.status >= 200 && xhr.status < 300) {
+>                 try {
+>                     resolve(JSON.parse(xhr.response));
+>                 } catch (e) {
+>                     reject(new Error('JSON解析失败'));
+>                 }
+>             } else {
+>                 reject(new Error(`HTTP ${xhr.status}: ${xhr.statusText}`));
+>             }
+>         };
+>
+>         xhr.open("GET", url);
+>         xhr.send();
+>     });
+> }
+> ```
+
+> 🎯 **实际应用场景**:
+> ```js
+> // 场景1:封装统一的API请求函数
+> function request(url, options = {}) {
+>     return new Promise((resolve, reject) => {
+>         const xhr = new XMLHttpRequest();
+>         const method = options.method || 'GET';
+>         const body = options.body;
+>
+>         xhr.open(method, url);
+>
+>         // 设置请求头
+>         if (options.headers) {
+>             Object.keys(options.headers).forEach(key => {
+>                 xhr.setRequestHeader(key, options.headers[key]);
+>             });
+>         }
+>
+>         xhr.onload = () => {
+>             if (xhr.status >= 200 && xhr.status < 300) {
+>                 resolve(JSON.parse(xhr.response));
+>             } else {
+>                 reject({ status: xhr.status, message: xhr.statusText });
+>             }
+>         };
+>
+>         xhr.send(body ? JSON.stringify(body) : null);
+>     });
+> }
+>
+> // 场景2:链式调用处理多个请求
+> promiseAjax('/api/user/123')
+>     .then(user => promiseAjax(`/api/posts?userId=${user.id}`))
+>     .then(posts => console.log('用户文章:', posts))
+>     .catch(error => console.error('请求失败:', error));
+>
+> // 场景3:并行请求多个接口
+> Promise.all([
+>     promiseAjax('/api/users'),
+>     promiseAjax('/api/posts'),
+>     promiseAjax('/api/comments')
+> ]).then(([users, posts, comments]) => {
+>     console.log({ users, posts, comments });
+> });
+> ```
 
 **案例三：封装 AJAX（完整版）**
 
@@ -1674,9 +1793,3 @@ after1
 > - [MDN - async function](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/async_function)
 > - [MDN - await](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/await)
 > - [Promise/A+ 规范](https://promisesaplus.com/)
-
-## 💬 评论交流
-
-有任何问题或建议，欢迎在下方留言交流！
-
-<ValineComment />

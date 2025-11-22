@@ -63,12 +63,20 @@ export default defineUserConfig({
         link: '/posts/',
       },
       {
+        text: '留言板',
+        link: '/guestbook.md',
+      },
+      {
         text: '关于',
         link: '/about.md',
       },
       {
         text: 'GitHub',
         link: 'https://github.com/zephyrnan',
+      },
+      {
+        text: 'CSDN',
+        link: 'https://blog.csdn.net/2303_80433826?type=blog',
       },
     ],
 
@@ -90,6 +98,18 @@ export default defineUserConfig({
           ],
         },
         {
+          text: 'Node.js 深入学习',
+          collapsible: true,
+          children: [
+            '/posts/nodejs/Node.js-文件系统模块.md',
+            '/posts/nodejs/Node.js-模块化设计.md',
+            '/posts/nodejs/Node.js-NPM包管理.md',
+            '/posts/nodejs/Node.js-HTTP模块.md',
+            '/posts/nodejs/Node.js-Express框架.md',
+            '/posts/nodejs/Node.js-MongoDB数据库.md',
+          ],
+        },
+        {
           text: '后端开发',
           children: [
             '/posts/SpringBoot 完整学习笔记.md',
@@ -103,6 +123,8 @@ export default defineUserConfig({
           ],
         },
       ],
+      // 留言板页面不显示侧边栏
+      '/guestbook.html': [],
     },
 
     // 最后更新时间

@@ -1,12 +1,3 @@
----
-title: JavaScript 学习笔记
-date: 2024-01-12
-categories:
-  - 前端
-tags:
-  - JavaScript
----
-
 # JavaScript 学习笔记
 
 [🪩 尚硅谷JavaScript基础&实战丨JS入门到精通全套完整版](https://www.bilibili.com/video/BV1YW411T7GX)
@@ -420,10 +411,38 @@ console.log(a || 100);        // 100
 #### 5.5 三元运算符
 
 ```js
+// 三元运算符：条件 ? 值1 : 值2
+// 如果条件为true,返回值1;否则返回值2
 let age = 18;
+
+// 根据年龄判断是否成年
 let result = age >= 18 ? '成年' : '未成年';
-console.log(result);  // '成年'
+console.log(result);  // 输出: '成年'
+
+// 三元运算符可以嵌套使用
+let score = 85;
+let grade = score >= 90 ? 'A' :
+            score >= 80 ? 'B' :
+            score >= 70 ? 'C' : 'D';
+console.log(grade);  // 输出: 'B'
 ```
+
+> ⚠️ **注意事项**:
+> - 三元运算符适合简单的条件判断,复杂逻辑建议使用 if-else
+> - 过度嵌套会降低代码可读性,建议最多嵌套一层
+> - 三元运算符必须有返回值,不能只执行语句
+
+> 🎯 **实际应用场景**:
+> ```js
+> // 场景1:动态设置CSS类名
+> const buttonClass = isActive ? 'btn-active' : 'btn-inactive';
+>
+> // 场景2:设置默认值
+> const username = inputValue ? inputValue : '游客';
+>
+> // 场景3:条件渲染(React中常用)
+> const display = isLoggedIn ? <UserProfile /> : <LoginButton />;
+> ```
 
 ### 6. 流程控制
 
@@ -432,61 +451,340 @@ console.log(result);  // '成年'
 **if 语句**
 
 ```js
+// if-else if-else 多分支结构
 let score = 85;
 
+// 根据分数判断等级
 if (score >= 90) {
-    console.log('优秀');
+    console.log('优秀');          // 分数>=90时执行
 } else if (score >= 80) {
-    console.log('良好');
+    console.log('良好');          // 分数80-89时执行,输出此项
 } else if (score >= 60) {
-    console.log('及格');
+    console.log('及格');          // 分数60-79时执行
 } else {
-    console.log('不及格');
+    console.log('不及格');        // 分数<60时执行
+}
+// 实际输出: '良好'
+
+// 单个if语句
+let age = 20;
+if (age >= 18) {
+    console.log('已成年');        // 输出: '已成年'
+}
+
+// if-else 双分支
+let isRaining = true;
+if (isRaining) {
+    console.log('带伞');          // 输出: '带伞'
+} else {
+    console.log('不带伞');
 }
 ```
+
+> ⚠️ **注意事项**:
+> - if 条件会进行隐式类型转换,建议使用明确的布尔值判断
+> - 多个 if-else if 只会执行第一个满足条件的分支
+> - 单行语句也建议使用花括号 `{}`,增强代码可读性
+> - 避免过深的嵌套(建议不超过3层),可使用提前返回优化
+>
+> ```js
+> // 不推荐:深层嵌套
+> if (user) {
+>     if (user.age >= 18) {
+>         if (user.hasPermission) {
+>             // ...
+>         }
+>     }
+> }
+>
+> // 推荐:提前返回
+> if (!user) return;
+> if (user.age < 18) return;
+> if (!user.hasPermission) return;
+> // ...
+> ```
+
+> 🎯 **实际应用场景**:
+> ```js
+> // 场景1:表单验证
+> function validateForm(data) {
+>     if (!data.username) {
+>         return '用户名不能为空';
+>     } else if (data.username.length < 3) {
+>         return '用户名至少3个字符';
+>     } else if (!data.email) {
+>         return '邮箱不能为空';
+>     } else {
+>         return '验证通过';
+>     }
+> }
+>
+> // 场景2:权限控制
+> if (user.role === 'admin') {
+>     showAdminPanel();
+> } else if (user.role === 'editor') {
+>     showEditorPanel();
+> } else {
+>     showUserPanel();
+> }
+>
+> // 场景3:响应式设计
+> if (window.innerWidth < 768) {
+>     loadMobileLayout();
+> } else if (window.innerWidth < 1024) {
+>     loadTabletLayout();
+> } else {
+>     loadDesktopLayout();
+> }
+> ```
 
 **switch 语句**
 
 ```js
+// switch 语句用于基于不同值执行不同代码
 let day = 3;
 
 switch (day) {
     case 1:
         console.log('星期一');
-        break;
+        break;  // break防止继续执行下一个case
     case 2:
         console.log('星期二');
         break;
     case 3:
-        console.log('星期三');
+        console.log('星期三');  // 匹配此项,输出: '星期三'
+        break;                 // break跳出switch
+    case 4:
+        console.log('星期四');
         break;
-    default:
-        console.log('其他');
+    case 5:
+        console.log('星期五');
+        break;
+    case 6:
+    case 7:                    // case可以合并,6或7都执行这里
+        console.log('周末');
+        break;
+    default:                   // 所有case都不匹配时执行
+        console.log('无效的日期');
+}
+
+// 利用穿透特性(不加break)
+let grade = 'B';
+switch (grade) {
+    case 'A':
+    case 'B':
+    case 'C':
+        console.log('及格');    // 输出: '及格'
+        break;
+    case 'D':
+    case 'F':
+        console.log('不及格');
+        break;
 }
 ```
+
+> ⚠️ **注意事项**:
+> - switch 使用**严格相等(===)**进行比较,不会进行类型转换
+> - 忘记 break 会导致**穿透(fall-through)**,继续执行下一个 case
+> - default 可以省略,但建议保留以处理意外情况
+> - case 值必须是常量表达式,不能是变量
+>
+> ```js
+> // 常见错误:类型不匹配
+> let num = '1';
+> switch (num) {
+>     case 1:  // 不会匹配,因为'1'!==1
+>         console.log('一');
+>         break;
+> }
+>
+> // 常见错误:忘记break
+> let x = 1;
+> switch (x) {
+>     case 1:
+>         console.log('A');  // 输出
+>     case 2:
+>         console.log('B');  // 也输出(穿透)
+>         break;
+> }
+> ```
+
+> 🎯 **实际应用场景**:
+> ```js
+> // 场景1:处理HTTP状态码
+> switch (response.status) {
+>     case 200:
+>         handleSuccess(response.data);
+>         break;
+>     case 404:
+>         showNotFound();
+>         break;
+>     case 500:
+>         showServerError();
+>         break;
+>     default:
+>         showUnknownError();
+> }
+>
+> // 场景2:根据用户操作执行不同逻辑
+> switch (action.type) {
+>     case 'ADD_TODO':
+>         return [...state, action.payload];
+>     case 'DELETE_TODO':
+>         return state.filter(item => item.id !== action.id);
+>     case 'TOGGLE_TODO':
+>         return state.map(item =>
+>             item.id === action.id
+>                 ? { ...item, completed: !item.completed }
+>                 : item
+>         );
+>     default:
+>         return state;
+> }
+>
+> // 场景3:根据文件类型处理
+> switch (file.extension) {
+>     case '.jpg':
+>     case '.png':
+>     case '.gif':
+>         return processImage(file);
+>     case '.mp4':
+>     case '.avi':
+>         return processVideo(file);
+>     case '.pdf':
+>         return processPDF(file);
+>     default:
+>         return processGenericFile(file);
+> }
+> ```
 
 #### 6.2 循环结构
 
 **for 循环**
 
 ```js
-// 基本 for 循环
+// 1. 基本 for 循环
+// for (初始化; 条件判断; 每次迭代后执行)
 for (let i = 0; i < 5; i++) {
-    console.log(i);  // 0 1 2 3 4
+    console.log(i);
 }
+// 输出: 0 1 2 3 4 (每个数字单独一行)
 
-// for...in 遍历对象的键
-let obj = { name: '张三', age: 18 };
+// 2. for...in 遍历对象的键(可枚举属性)
+let obj = { name: '张三', age: 18, city: '北京' };
 for (let key in obj) {
     console.log(key, obj[key]);
 }
+// 输出:
+// name 张三
+// age 18
+// city 北京
 
-// for...of 遍历可迭代对象的值（ES6）
+// 3. for...of 遍历可迭代对象的值（ES6）
+// 适用于数组、字符串、Map、Set等
 let arr = [10, 20, 30];
 for (let value of arr) {
-    console.log(value);  // 10 20 30
+    console.log(value);
 }
+// 输出: 10 20 30
+
+// 4. 遍历字符串
+let str = 'Hello';
+for (let char of str) {
+    console.log(char);
+}
+// 输出: H e l l o (每个字符单独一行)
+
+// 5. 数组的forEach方法(推荐用于数组遍历)
+let fruits = ['苹果', '香蕉', '橙子'];
+fruits.forEach((item, index) => {
+    console.log(`${index}: ${item}`);
+});
+// 输出:
+// 0: 苹果
+// 1: 香蕉
+// 2: 橙子
 ```
+
+> ⚠️ **注意事项**:
+> - **for...in** 不应用于数组遍历(会遍历所有可枚举属性,包括原型链上的)
+> - **for...of** 不能直接遍历普通对象(对象不是可迭代对象)
+> - 循环变量建议使用 `let` 而不是 `var`,避免作用域问题
+> - 避免在循环内修改循环变量,容易造成死循环
+>
+> ```js
+> // 常见错误1:for...in遍历数组
+> let arr = [1, 2, 3];
+> arr.custom = 'test';
+> for (let i in arr) {
+>     console.log(i);  // 输出: 0, 1, 2, custom (不仅仅是索引!)
+> }
+>
+> // 常见错误2:for...of遍历对象
+> let obj = { a: 1, b: 2 };
+> for (let val of obj) {  // 报错: obj is not iterable
+>     console.log(val);
+> }
+>
+> // 常见错误3:使用var导致的闭包问题
+> for (var i = 0; i < 3; i++) {
+>     setTimeout(() => console.log(i), 100);
+> }
+> // 输出: 3 3 3 (而不是 0 1 2)
+> // 解决:使用let
+> for (let i = 0; i < 3; i++) {
+>     setTimeout(() => console.log(i), 100);
+> }
+> // 输出: 0 1 2
+> ```
+
+> 🎯 **实际应用场景**:
+> ```js
+> // 场景1:遍历DOM元素列表
+> const buttons = document.querySelectorAll('button');
+> for (let btn of buttons) {
+>     btn.addEventListener('click', handleClick);
+> }
+>
+> // 场景2:处理API返回的数组数据
+> const users = await fetch('/api/users').then(r => r.json());
+> for (let user of users) {
+>     renderUserCard(user);
+> }
+>
+> // 场景3:遍历对象属性进行数据转换
+> const formData = { name: 'John', age: '25', email: 'john@example.com' };
+> const queryString = [];
+> for (let key in formData) {
+>     queryString.push(`${key}=${formData[key]}`);
+> }
+> console.log(queryString.join('&'));
+> // 输出: name=John&age=25&email=john@example.com
+>
+> // 场景4:使用forEach处理购物车
+> const cart = [
+>     { name: '商品A', price: 100, count: 2 },
+>     { name: '商品B', price: 50, count: 1 }
+> ];
+> let total = 0;
+> cart.forEach(item => {
+>     total += item.price * item.count;
+> });
+> console.log(`总价: ${total}元`);  // 输出: 总价: 250元
+>
+> // 场景5:for...in vs for...of 对比
+> const data = ['a', 'b', 'c'];
+>
+> // for...in 获取索引
+> for (let index in data) {
+>     console.log(index, typeof index);  // '0' string, '1' string, '2' string
+> }
+>
+> // for...of 获取值
+> for (let value of data) {
+>     console.log(value, typeof value);  // 'a' string, 'b' string, 'c' string
+> }
+> ```
 
 **while 循环**
 
@@ -496,7 +794,45 @@ while (i < 5) {
     console.log(i);
     i++;
 }
+// 输出: 0 1 2 3 4
 ```
+
+> ⚠️ **注意事项**:
+> - while先判断条件再执行循环体,条件为false时一次也不执行
+> - 必须在循环体内改变条件,否则会造成死循环
+> - 不确定循环次数时优先使用while
+>
+> ```js
+> // 常见错误:忘记更新条件导致死循环
+> let i = 0;
+> while (i < 5) {
+>     console.log(i);
+>     // 忘记 i++，会无限循环输出0
+> }
+> ```
+
+> 🎯 **实际应用场景**:
+> ```js
+> // 场景1:读取用户输入直到满足条件
+> let password = '';
+> while (password !== 'correct') {
+>     password = prompt('请输入密码:');
+> }
+>
+> // 场景2:处理队列
+> let queue = [1, 2, 3, 4, 5];
+> while (queue.length > 0) {
+>     let item = queue.shift();
+>     processItem(item);
+> }
+>
+> // 场景3:等待异步操作完成
+> let retries = 0;
+> while (retries < 3 && !isConnected()) {
+>     await tryConnect();
+>     retries++;
+> }
+> ```
 
 **do...while 循环**
 
@@ -506,7 +842,52 @@ do {
     console.log(j);
     j++;
 } while (j < 5);
+// 输出: 0 1 2 3 4
 ```
+
+> ⚠️ **注意事项**:
+> - do-while先执行后判断,**至少执行一次**循环体
+> - 与while的区别:条件为false时,while一次不执行,do-while执行一次
+> - 适用于至少需要执行一次的场景
+>
+> ```js
+> // while vs do-while 对比
+> let i = 10;
+> while (i < 5) {
+>     console.log('while:', i);  // 不执行
+> }
+>
+> let j = 10;
+> do {
+>     console.log('do-while:', j);  // 执行一次,输出: do-while: 10
+> } while (j < 5);
+> ```
+
+> 🎯 **实际应用场景**:
+> ```js
+> // 场景1:菜单系统(至少显示一次)
+> let choice;
+> do {
+>     console.log('1. 开始游戏');
+>     console.log('2. 设置');
+>     console.log('3. 退出');
+>     choice = prompt('请选择:');
+> } while (choice !== '3');
+>
+> // 场景2:输入验证(至少尝试一次)
+> let input;
+> do {
+>     input = prompt('请输入6位数字密码:');
+> } while (!/^\d{6}$/.test(input));
+>
+> // 场景3:游戏主循环
+> let gameOver = false;
+> do {
+>     updateGame();
+>     renderGame();
+>     gameOver = checkGameOver();
+> } while (!gameOver);
+> ```
 
 **break 和 continue**
 
@@ -524,6 +905,75 @@ for (let i = 0; i < 5; i++) {
 }
 ```
 
+> ⚠️ **注意事项**:
+> - **break**: 立即终止整个循环,跳出循环体
+> - **continue**: 跳过当前迭代,继续下一次迭代
+> - 在嵌套循环中,break/continue只影响最内层循环
+> - 可以使用标签(label)来跳出外层循环
+>
+> ```js
+> // break vs continue 区别
+> console.log('--- break ---');
+> for (let i = 0; i < 5; i++) {
+>     if (i === 2) break;    // 遇到2就结束
+>     console.log(i);        // 输出: 0 1
+> }
+>
+> console.log('--- continue ---');
+> for (let i = 0; i < 5; i++) {
+>     if (i === 2) continue; // 遇到2就跳过
+>     console.log(i);        // 输出: 0 1 3 4
+> }
+>
+> // 使用标签跳出外层循环
+> outer: for (let i = 0; i < 3; i++) {
+>     for (let j = 0; j < 3; j++) {
+>         if (i === 1 && j === 1) {
+>             break outer;  // 跳出外层循环
+>         }
+>         console.log(i, j);
+>     }
+> }
+> ```
+
+> 🎯 **实际应用场景**:
+> ```js
+> // 场景1:查找数组中的元素(找到后立即停止)
+> let users = ['Alice', 'Bob', 'Charlie', 'David'];
+> let target = 'Charlie';
+> for (let user of users) {
+>     if (user === target) {
+>         console.log('找到用户:', user);
+>         break;  // 找到后立即停止搜索
+>     }
+> }
+>
+> // 场景2:跳过无效数据
+> let numbers = [1, -2, 3, -4, 5, -6];
+> let sum = 0;
+> for (let num of numbers) {
+>     if (num < 0) continue;  // 跳过负数
+>     sum += num;
+> }
+> console.log(sum);  // 输出: 9 (只计算正数)
+>
+> // 场景3:分页加载,找到目标页后停止
+> for (let page = 1; page <= 10; page++) {
+>     let data = await fetchPage(page);
+>     if (data.includes(targetItem)) {
+>         console.log('在第', page, '页找到');
+>         break;
+>     }
+> }
+>
+> // 场景4:表单验证,跳过空字段
+> let formData = { name: 'John', email: '', phone: '123456' };
+> for (let key in formData) {
+>     if (!formData[key]) continue;  // 跳过空值
+>     console.log(`${key}: ${formData[key]}`);
+> }
+> ```
+
 ## 三、函数
 
 ### 1. 函数的定义
@@ -534,6 +984,7 @@ for (let i = 0; i < 5; i++) {
 function sayHello(name) {
     console.log('Hello, ' + name);
 }
+// 函数声明会被提升(hoisting),可以在声明前调用
 ```
 
 **函数表达式**
@@ -542,6 +993,7 @@ function sayHello(name) {
 let sayHi = function(name) {
     console.log('Hi, ' + name);
 };
+// 函数表达式不会提升,只能在声明后调用
 ```
 
 **箭头函数（ES6）**
@@ -554,6 +1006,63 @@ let add = function(a, b) {
     return a + b;
 };
 ```
+
+> ⚠️ **函数定义方式对比**:
+>
+> | 特性 | 函数声明 | 函数表达式 | 箭头函数 |
+> |------|---------|-----------|---------|
+> | 提升 | 是 | 否 | 否 |
+> | this绑定 | 动态 | 动态 | 继承外层 |
+> | arguments | 有 | 有 | 无 |
+> | 构造函数 | 可以 | 可以 | 不可以 |
+> | 适用场景 | 常规函数 | 回调、条件定义 | 简洁回调、不需要this |
+>
+> ```js
+> // 函数提升示例
+> sayHello('Alice');  // 正常运行
+> function sayHello(name) {
+>     console.log('Hello', name);
+> }
+>
+> sayHi('Bob');  // 报错: sayHi is not a function
+> let sayHi = function(name) {
+>     console.log('Hi', name);
+> };
+>
+> // 箭头函数的this绑定
+> let obj = {
+>     name: 'Object',
+>     regular: function() {
+>         console.log(this.name);  // 'Object'
+>     },
+>     arrow: () => {
+>         console.log(this.name);  // undefined (继承外层作用域的this)
+>     }
+> };
+> ```
+
+> 🎯 **实际应用场景**:
+> ```js
+> // 场景1:数组方法中使用箭头函数
+> const numbers = [1, 2, 3, 4, 5];
+> const doubled = numbers.map(n => n * 2);  // [2, 4, 6, 8, 10]
+> const evens = numbers.filter(n => n % 2 === 0);  // [2, 4]
+>
+> // 场景2:函数表达式用于条件定义
+> const mode = 'development';
+> const log = mode === 'development'
+>     ? function(msg) { console.log('[DEV]', msg); }
+>     : function(msg) { /* 生产环境不输出 */ };
+>
+> // 场景3:箭头函数简化回调
+> setTimeout(() => console.log('延迟执行'), 1000);
+> button.addEventListener('click', () => handleClick());
+>
+> // 场景4:函数声明用于工具函数
+> function formatDate(date) {
+>     return date.toISOString().split('T')[0];
+> }
+> ```
 
 **Function 构造函数（不推荐）**
 
@@ -595,6 +1104,53 @@ greet();         // "Hello, 游客"
 greet('张三');   // "Hello, 张三"
 ```
 
+> ⚠️ **注意事项**:
+> - 默认参数只在参数为 `undefined` 时生效,`null` 不会触发默认值
+> - 默认参数可以引用前面的参数
+> - 默认参数会创建单独的作用域
+>
+> ```js
+> // undefined vs null
+> function test(x = 10) {
+>     return x;
+> }
+> console.log(test(undefined));  // 10 (使用默认值)
+> console.log(test(null));       // null (不使用默认值)
+>
+> // 引用前面的参数
+> function greet(name = '游客', message = `Hello, ${name}`) {
+>     return message;
+> }
+> console.log(greet('Alice'));  // "Hello, Alice"
+> ```
+
+> 🎯 **实际应用场景**:
+> ```js
+> // 场景1:API请求配置
+> function fetchData(url, options = {}) {
+>     const config = {
+>         method: options.method || 'GET',
+>         headers: options.headers || {},
+>         timeout: options.timeout || 5000
+>     };
+>     return fetch(url, config);
+> }
+>
+> // 场景2:分页参数
+> function getUsers(page = 1, pageSize = 10) {
+>     return fetch(`/api/users?page=${page}&size=${pageSize}`);
+> }
+>
+> // 场景3:配置对象
+> function createButton(text, {
+>     color = 'blue',
+>     size = 'medium',
+>     disabled = false
+> } = {}) {
+>     return { text, color, size, disabled };
+> }
+> ```
+
 **剩余参数（ES6）**
 
 ```js
@@ -604,6 +1160,61 @@ function sum(...numbers) {
 
 console.log(sum(1, 2, 3, 4));  // 10
 ```
+
+> ⚠️ **注意事项**:
+> - 剩余参数必须是最后一个参数
+> - 剩余参数是真正的数组,可以使用所有数组方法
+> - 一个函数只能有一个剩余参数
+> - 剩余参数 vs arguments: 剩余参数是数组,arguments是伪数组
+>
+> ```js
+> // 正确:剩余参数在最后
+> function fn(a, b, ...rest) {
+>     console.log(rest);  // 真数组
+> }
+>
+> // 错误:剩余参数不是最后一个
+> function fn(...rest, a) {  // 语法错误
+> }
+>
+> // 剩余参数 vs arguments
+> function test(...args) {
+>     console.log(Array.isArray(args));  // true
+>     args.forEach(x => console.log(x)); // 可以用数组方法
+> }
+> ```
+
+> 🎯 **实际应用场景**:
+> ```js
+> // 场景1:不定参数的数学运算
+> function max(...numbers) {
+>     return Math.max(...numbers);
+> }
+> console.log(max(1, 5, 3, 9, 2));  // 9
+>
+> // 场景2:合并参数
+> function logWithPrefix(prefix, ...messages) {
+>     messages.forEach(msg => console.log(`[${prefix}]`, msg));
+> }
+> logWithPrefix('INFO', 'Server started', 'Port 3000');
+>
+> // 场景3:函数柯里化
+> function curry(fn, ...fixedArgs) {
+>     return function(...newArgs) {
+>         return fn(...fixedArgs, ...newArgs);
+>     };
+> }
+>
+> // 场景4:代理/装饰器模式
+> function logger(fn) {
+>     return function(...args) {
+>         console.log('调用参数:', args);
+>         const result = fn(...args);
+>         console.log('返回结果:', result);
+>         return result;
+>     };
+> }
+> ```
 
 **arguments 对象**
 
@@ -3192,9 +3803,3 @@ requestAnimationFrame(animate);
 > - [MDN Web Docs](https://developer.mozilla.org/zh-CN/)
 > - [JavaScript.info](https://javascript.info/)
 > - [ES6 入门教程](https://es6.ruanyifeng.com/) 
-
-## 💬 评论交流
-
-有任何问题或建议，欢迎在下方留言交流！
-
-<ValineComment />

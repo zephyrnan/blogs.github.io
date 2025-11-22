@@ -1,13 +1,3 @@
----
-title: AJAX 学习笔记
-date: 2024-01-12
-categories:
-  - 前端
-tags:
-  - AJAX
-  - JavaScript
----
-
 # AJAX 学习笔记
 
 ## 前言
@@ -294,6 +284,92 @@ xhr.onreadystatechange = function() {
     }
 };
 ```
+
+> ⚠️ **注意事项**:
+> - **readyState 为 4** 表示请求完成,但不代表成功,还需检查 status
+> - **status 200-299** 表示成功,常见的是 200(OK)
+> - **onreadystatechange** 会触发多次(0→1→2→3→4),需要判断 readyState === 4
+> - **同步请求会阻塞**浏览器,必须使用异步(async = true)
+> - GET 请求的参数应该放在 URL 中,不要放在 send() 中
+>
+> ```js
+> // 错误示例:onreadystatechange触发多次
+> xhr.onreadystatechange = function() {
+>     console.log(xhr.status);  // 会输出多次: 0, 0, 200, 200, 200
+> };
+>
+> // 正确做法
+> xhr.onreadystatechange = function() {
+>     if (xhr.readyState === 4 && xhr.status === 200) {
+>         console.log(xhr.responseText);
+>     }
+> };
+>
+> // GET请求带参数的正确方式
+> xhr.open('GET', '/api/users?page=1&size=10', true);
+> xhr.send(null);  // GET请求send()传null
+> ```
+
+> 🎯 **实际应用场景**:
+> ```js
+> // 场景1:获取用户列表
+> function getUserList(page = 1, pageSize = 10) {
+>     const xhr = new XMLHttpRequest();
+>     xhr.open('GET', `/api/users?page=${page}&pageSize=${pageSize}`);
+>
+>     xhr.onreadystatechange = function() {
+>         if (xhr.readyState === 4) {
+>             if (xhr.status === 200) {
+>                 const users = JSON.parse(xhr.responseText);
+>                 renderUserList(users);
+>             } else {
+>                 showError('获取用户列表失败');
+>             }
+>         }
+>     };
+>
+>     xhr.send();
+> }
+>
+> // 场景2:搜索功能(带防抖)
+> let searchTimer;
+> function searchUsers(keyword) {
+>     clearTimeout(searchTimer);
+>     searchTimer = setTimeout(() => {
+>         const xhr = new XMLHttpRequest();
+>         xhr.open('GET', `/api/search?q=${encodeURIComponent(keyword)}`);
+>         xhr.onload = function() {
+>             if (xhr.status === 200) {
+>                 displaySearchResults(JSON.parse(xhr.responseText));
+>             }
+>         };
+>         xhr.send();
+>     }, 300);
+> }
+>
+> // 场景3:加载更多(无限滚动)
+> let currentPage = 1;
+> function loadMore() {
+>     const xhr = new XMLHttpRequest();
+>     xhr.open('GET', `/api/posts?page=${currentPage}`);
+>
+>     xhr.onload = function() {
+>         if (xhr.status === 200) {
+>             const posts = JSON.parse(xhr.responseText);
+>             appendPosts(posts);
+>             currentPage++;
+>         }
+>     };
+>
+>     xhr.send();
+> }
+>
+> window.addEventListener('scroll', () => {
+>     if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+>         loadMore();
+>     }
+> });
+> ```
 
 #### 1.2 GET 请求（使用 onload）
 
@@ -1491,9 +1567,3 @@ class Ajax {
 > - [MDN - XMLHttpRequest](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest)
 > - [MDN - 使用 Fetch](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch)
 > - [AJAX 教程 - W3School](https://www.w3school.com.cn/ajax/index.asp)
-
-## 💬 评论交流
-
-有任何问题或建议，欢迎在下方留言交流！
-
-<ValineComment />

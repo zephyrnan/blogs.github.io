@@ -1,13 +1,3 @@
----
-title: HTML5 与 CSS 综合学习笔记
-date: 2024-01-12
-categories:
-  - 前端
-tags:
-  - HTML5
-  - CSS
----
-
 # HTML5 与 CSS 综合学习笔记
 
 ## 前言
@@ -77,6 +67,101 @@ HTML 和 CSS 是前端开发的基石，两者相辅相成：
 > - `<title>`：页面标题，显示在浏览器标签页
 > - `<body>`：页面的可见内容
 > - `<script>`：建议放在 body 底部，避免阻塞页面渲染
+
+> ⚠️ **注意事项**:
+> - **DOCTYPE必须位于第一行**: 否则浏览器可能进入怪异模式(Quirks Mode)
+> - **UTF-8编码**: 避免中文乱码,必须设置charset
+> - **viewport设置**: width=device-width确保移动端正常显示
+> - **title很重要**: 影响SEO和浏览器标签显示
+> - **script位置**: 放在body底部或使用defer/async属性
+>
+> ```html
+> <!-- 常见错误:缺少DOCTYPE -->
+> <html>  <!-- ❌ 缺少<!DOCTYPE html> -->
+>   <head>...</head>
+> </html>
+>
+> <!-- 常见错误:charset写错 -->
+> <meta charset="utf8">  <!-- ❌ 应该是UTF-8 -->
+> <meta charset="UTF-8"> <!-- ✅ 正确 -->
+>
+> <!-- script的三种加载方式 -->
+> <script src="app.js"></script>           <!-- 阻塞渲染 -->
+> <script src="app.js" defer></script>     <!-- 延迟执行,保持顺序 -->
+> <script src="app.js" async></script>     <!-- 异步加载,不保证顺序 -->
+> ```
+
+> 🎯 **实际应用场景**:
+> ```html
+> <!-- 场景1:完整的现代HTML5模板 -->
+> <!DOCTYPE html>
+> <html lang="zh-CN">
+> <head>
+>     <meta charset="UTF-8">
+>     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+>     <meta name="description" content="网站描述,用于SEO">
+>     <meta name="keywords" content="关键词1,关键词2">
+>     <meta name="author" content="作者名">
+>
+>     <!-- Open Graph for social media -->
+>     <meta property="og:title" content="分享标题">
+>     <meta property="og:description" content="分享描述">
+>     <meta property="og:image" content="https://example.com/image.jpg">
+>
+>     <title>页面标题 - 网站名称</title>
+>
+>     <!-- Favicon -->
+>     <link rel="icon" href="/favicon.ico">
+>     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+>
+>     <!-- CSS -->
+>     <link rel="stylesheet" href="css/style.css">
+> </head>
+> <body>
+>     <header>...</header>
+>     <main>...</main>
+>     <footer>...</footer>
+>
+>     <!-- JavaScript -->
+>     <script src="js/app.js" defer></script>
+> </body>
+> </html>
+>
+> <!-- 场景2:单页应用(SPA)结构 -->
+> <!DOCTYPE html>
+> <html lang="zh-CN">
+> <head>
+>     <meta charset="UTF-8">
+>     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+>     <title>Vue/React 应用</title>
+> </head>
+> <body>
+>     <div id="app"></div>
+>     <script src="bundle.js"></script>
+> </body>
+> </html>
+>
+> <!-- 场景3:PWA应用配置 -->
+> <!DOCTYPE html>
+> <html lang="zh-CN">
+> <head>
+>     <meta charset="UTF-8">
+>     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+>     <meta name="theme-color" content="#4285f4">
+>     <link rel="manifest" href="/manifest.json">
+>     <title>PWA 应用</title>
+> </head>
+> <body>
+>     <div id="root"></div>
+>     <script>
+>       // 注册 Service Worker
+>       if ('serviceWorker' in navigator) {
+>         navigator.serviceWorker.register('/sw.js');
+>       }
+>     </script>
+> </body>
+> </html>
+> ```
 
 ## 二、HTML5 常用标签
 
@@ -3223,9 +3308,3 @@ html {
 - 学习 **前端框架**（Vue/React/Angular）
 
 持续练习，不断实践，你一定能成为优秀的前端开发者！🚀
-
-## 💬 评论交流
-
-有任何问题或建议，欢迎在下方留言交流！
-
-<ValineComment />

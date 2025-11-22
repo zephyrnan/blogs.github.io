@@ -1,13 +1,3 @@
----
-title: Axios完整学习笔记
-date: 2024-01-12
-categories:
-  - 前端
-tags:
-  - Axios
-  - JavaScript
----
-
 # Axios 完整学习笔记
 
 > Axios 是一个基于 Promise 的 HTTP 客户端，适用于浏览器和 Node.js 环境。本笔记涵盖从基础使用到高级特性、源码实现的完整内容。
@@ -145,6 +135,97 @@ axios({
 })
   .then(response => console.log(response.data));
 ```
+
+> ⚠️ **注意事项**:
+> - **params 会自动编码**:特殊字符会被 encodeURIComponent 处理
+> - **GET 请求参数在 URL 中**:params 配置项会拼接到 URL ?后面
+> - **response.data** 是响应体数据,已自动解析 JSON
+> - **catch 捕获错误**:包括网络错误、4xx/5xx 状态码等
+> - params 中的数组和对象会自动序列化
+>
+> ```javascript
+> // params自动编码示例
+> axios.get('/api/search', {
+>   params: {
+>     keyword: '你好 世界',  // 自动编码为 %E4%BD%A0%E5%A5%BD%20%E4%B8%96%E7%95%8C
+>     tags: ['vue', 'react']  // 自动序列化为 tags[]=vue&tags[]=react
+>   }
+> });
+>
+> // 完整的错误处理
+> axios.get('/api/posts')
+>   .then(response => {
+>     console.log('状态码:', response.status);        // 200
+>     console.log('响应头:', response.headers);       // {...}
+>     console.log('响应数据:', response.data);        // 实际数据
+>     console.log('请求配置:', response.config);      // 请求配置
+>   })
+>   .catch(error => {
+>     if (error.response) {
+>       // 服务器返回了错误状态码
+>       console.log('错误状态:', error.response.status);
+>       console.log('错误数据:', error.response.data);
+>     } else if (error.request) {
+>       // 请求已发出但没有收到响应
+>       console.log('无响应:', error.request);
+>     } else {
+>       // 请求配置出错
+>       console.log('配置错误:', error.message);
+>     }
+>   });
+> ```
+
+> 🎯 **实际应用场景**:
+> ```javascript
+> // 场景1:分页查询列表
+> async function getPosts(page = 1, pageSize = 10) {
+>   try {
+>     const { data } = await axios.get('/api/posts', {
+>       params: {
+>         _page: page,
+>         _limit: pageSize,
+>         _sort: 'createdAt',
+>         _order: 'desc'
+>       }
+>     });
+>     return data;
+>   } catch (error) {
+>     console.error('获取文章失败:', error);
+>     throw error;
+>   }
+> }
+>
+> // 场景2:搜索功能(支持多条件)
+> function searchPosts(filters) {
+>   return axios.get('/api/posts', {
+>     params: {
+>       q: filters.keyword,        // 关键词
+>       category: filters.category, // 分类
+>       tags: filters.tags,        // 标签数组
+>       minViews: filters.minViews // 最小浏览量
+>     }
+>   });
+> }
+>
+> // 使用示例
+> searchPosts({
+>   keyword: 'axios',
+>   category: 'tutorial',
+>   tags: ['http', 'ajax'],
+>   minViews: 100
+> }).then(({ data }) => {
+>   console.log('搜索结果:', data);
+> });
+>
+> // 场景3:获取单条数据详情
+> function getPostDetail(id) {
+>   return axios.get(`/api/posts/${id}`, {
+>     params: {
+>       _embed: 'comments'  // 关联查询评论
+>     }
+>   });
+> }
+> ```
 
 #### 2.3.2 发送 POST 请求
 
@@ -2553,9 +2634,3 @@ Axios 是一个功能强大、易于使用的 HTTP 客户端库。掌握其核�
 
 **最后更新:** 2025-11-02
 **作者:** 前端学习笔记
-
-## 💬 评论交流
-
-有任何问题或建议，欢迎在下方留言交流！
-
-<ValineComment />

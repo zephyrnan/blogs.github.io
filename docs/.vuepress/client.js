@@ -1,16 +1,22 @@
 import { defineClientConfig } from '@vuepress/client'
 import ValineComment from './components/ValineComment.vue'
 import PostCard from './components/PostCard.vue'
-import { onMounted } from 'vue'
+import Giscus from './components/Giscus.vue'
+import { onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 export default defineClientConfig({
   enhance({ app }) {
     app.component('ValineComment', ValineComment)
     app.component('PostCard', PostCard)
+    app.component('Giscus', Giscus)
     console.log('✅ ValineComment 组件已注册')
     console.log('✅ PostCard 组件已注册')
+    console.log('✅ Giscus 组件已注册')
   },
   setup() {
+    const router = useRouter()
+
     onMounted(() => {
       console.log('🎨 特效初始化开始...')
 
@@ -185,6 +191,27 @@ export default defineClientConfig({
         console.log('✅ 返回顶部按钮已加载')
       }
 
+      // 表格响应式容器包装
+      const initTableWrapper = () => {
+        const tables = document.querySelectorAll('.theme-default-content table')
+        tables.forEach(table => {
+          // 检查是否已经被包装过
+          if (table.parentElement.classList.contains('table-container')) {
+            return
+          }
+
+          // 创建包装容器
+          const wrapper = document.createElement('div')
+          wrapper.className = 'table-container'
+
+          // 在表格外面包装容器
+          table.parentNode.insertBefore(wrapper, table)
+          wrapper.appendChild(table)
+        })
+
+        console.log(`✅ 已为 ${tables.length} 个表格添加响应式容器`)
+      }
+
       // 页面加载进度条
       const initProgressBar = () => {
         if (document.getElementById("reading-progress")) return
@@ -244,13 +271,14 @@ export default defineClientConfig({
         console.log("✅ 自定义样式已加载")
       }
 
-      
+
         initStyles()
 
       // 延迟初始化，确保DOM完全加载
       setTimeout(() => {
         initStyles()
         initClickEffect()
+        initTableWrapper() // 初始化表格包装器
         if (!isMobile || window.innerWidth >= 1024) {
           // 大屏幕或桌面设备才启用粒子效果
           initBackgroundEffect()
@@ -259,5 +287,24 @@ export default defineClientConfig({
         console.log('🎉 所有特效初始化完成！')
       }, 100)
     })
+
+    // 监听路由变化，重新包装新页面的表格
+    watch(
+      () => router.currentRoute.value.path,
+      () => {
+        setTimeout(() => {
+          const tables = document.querySelectorAll('.theme-default-content table')
+          tables.forEach(table => {
+            if (!table.parentElement.classList.contains('table-container')) {
+              const wrapper = document.createElement('div')
+              wrapper.className = 'table-container'
+              table.parentNode.insertBefore(wrapper, table)
+              wrapper.appendChild(table)
+            }
+          })
+          console.log('🔄 路由变化，已更新表格容器')
+        }, 200)
+      }
+    )
   },
 })

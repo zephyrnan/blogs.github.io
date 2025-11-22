@@ -1,13 +1,3 @@
----
-title: GitHub新手完全指南
-date: 2024-01-12
-categories:
-  - 工具
-tags:
-  - GitHub
-  - Git
----
-
 # GitHub 新手完全指南
 
 ## 目录
@@ -61,6 +51,68 @@ git config --global user.email "your_email@example.com"
 # 查看配置
 git config --list
 ```
+
+> ⚠️ **注意事项**:
+> - **--global vs --local**:
+>   - `--global`: 全局配置,对所有Git仓库生效
+>   - `--local`: 仅对当前仓库生效(省略--global即为本地)
+> - **邮箱要匹配**: 邮箱最好与GitHub注册邮箱一致,否则贡献记录可能不显示
+> - **中文用户名**: 支持中文,但建议使用英文避免兼容性问题
+> - **查看特定配置**: `git config user.name` 或 `git config user.email`
+> - **配置文件位置**:
+>   - 全局: `~/.gitconfig` (Windows: `C:\Users\用户名\.gitconfig`)
+>   - 本地: `.git/config`
+>
+> ```bash
+> // 常见错误:邮箱设置错误
+> git config --global user.email "email@example"  # ❌ 无效邮箱格式
+> git config --global user.email "email@example.com"  # ✅ 正确
+>
+> // 为单个项目设置不同的用户信息
+> cd my-work-project
+> git config --local user.email "work@company.com"  # 工作邮箱
+>
+> cd ../my-personal-project
+> git config --local user.email "personal@gmail.com"  # 个人邮箱
+>
+> // 查看生效的配置
+> git config --list --show-origin  # 显示每个配置的来源
+> ```
+
+> 🎯 **实际应用场景**:
+> ```bash
+> // 场景1:初次安装Git后的全局配置
+> git config --global user.name "Zhang San"
+> git config --global user.email "zhangsan@example.com"
+> git config --global core.editor "code --wait"  # 设置默认编辑器为VSCode
+> git config --global init.defaultBranch main  # 设置默认分支名为main
+>
+> // 场景2:工作电脑配置多个Git账户
+> # 全局使用工作账户
+> git config --global user.name "Work Name"
+> git config --global user.email "work@company.com"
+>
+> # 个人项目使用个人账户
+> cd ~/personal-projects/my-blog
+> git config --local user.name "Personal Name"
+> git config --local user.email "personal@gmail.com"
+>
+> // 场景3:配置Git常用别名
+> git config --global alias.st status  # git st = git status
+> git config --global alias.co checkout  # git co = git checkout
+> git config --global alias.br branch  # git br = git branch
+> git config --global alias.cm "commit -m"  # git cm "msg"
+> git config --global alias.last "log -1 HEAD"  # 查看最后一次提交
+>
+> // 场景4:配置中文文件名显示
+> git config --global core.quotepath false  # 显示中文文件名而不是转义字符
+>
+> // 场景5:配置Windows/Linux换行符处理
+> # Windows用户
+> git config --global core.autocrlf true
+> # Linux/macOS用户
+> git config --global core.autocrlf input
+> ```
 
 ### 4. 配置 SSH 密钥（推荐）
 
@@ -1026,9 +1078,3 @@ git merge    # 合并分支
 ---
 
 **祝你使用 Git/GitHub 顺利！** 遇到问题时，记住：`git help` 是你的好朋友。
-
-## 💬 评论交流
-
-有任何问题或建议，欢迎在下方留言交流！
-
-<ValineComment />

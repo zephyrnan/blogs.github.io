@@ -33,6 +33,7 @@
 ## 联系方式
 
 - **GitHub**: [zephyrnan](https://github.com/zephyrnan)
+- **CSDN**: [我的CSDN博客](https://blog.csdn.net/2303_80433826?type=blog)
 - **Email**: 2764304248@qq.com
 - **博客**: [https://zephyrnan.github.io](https://zephyrnan.github.io)
 

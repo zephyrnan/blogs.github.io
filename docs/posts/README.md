@@ -184,6 +184,64 @@
   </a>
 </div>
 
+## 📗 Node.js 深入学习
+
+<div class="post-nav">
+  <a href="/posts/nodejs/Node.js-文件系统模块.html" class="post-card">
+    <div class="card-icon">📁</div>
+    <div class="card-content">
+      <div class="card-title">Node.js 文件系统模块</div>
+      <div class="card-desc">fs 模块详解、文件读写、流式处理、目录操作、文件监听等核心功能与实战案例</div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <a href="/posts/nodejs/Node.js-模块化设计.html" class="post-card">
+    <div class="card-icon">📦</div>
+    <div class="card-content">
+      <div class="card-title">Node.js 模块化设计</div>
+      <div class="card-desc">CommonJS 与 ES6 模块系统、模块导入导出、循环依赖处理、模块化最佳实践</div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <a href="/posts/nodejs/Node.js-NPM包管理.html" class="post-card">
+    <div class="card-icon">📚</div>
+    <div class="card-content">
+      <div class="card-title">Node.js NPM 包管理</div>
+      <div class="card-desc">package.json 配置、依赖管理、npm 脚本、版本控制、发布包到 npm 仓库</div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <a href="/posts/nodejs/Node.js-HTTP模块.html" class="post-card">
+    <div class="card-icon">🌐</div>
+    <div class="card-content">
+      <div class="card-title">Node.js HTTP 模块</div>
+      <div class="card-desc">创建 HTTP 服务器、处理请求响应、路由设计、RESTful API、静态文件服务</div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <a href="/posts/nodejs/Node.js-Express框架.html" class="post-card">
+    <div class="card-icon">🚂</div>
+    <div class="card-content">
+      <div class="card-title">Node.js Express 框架</div>
+      <div class="card-desc">Express 路由系统、中间件机制、模板引擎、会话管理、文件上传、MVC 架构</div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <a href="/posts/nodejs/Node.js-MongoDB数据库.html" class="post-card">
+    <div class="card-icon">🍃</div>
+    <div class="card-content">
+      <div class="card-title">Node.js MongoDB 数据库</div>
+      <div class="card-desc">MongoDB 基础、Mongoose ODM、数据模型设计、CRUD 操作、聚合查询、性能优化</div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+</div>
+
 ## 🚀 后端开发
 
 <div class="post-nav">

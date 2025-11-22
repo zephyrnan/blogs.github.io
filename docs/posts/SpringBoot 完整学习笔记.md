@@ -1,13 +1,3 @@
----
-title: SpringBoot 完整学习笔记
-date: 2024-01-12
-categories:
-  - 后端
-tags:
-  - SpringBoot
-  - Java
----
-
 # SpringBoot 完整学习笔记
 
 > Spring Boot 是由 Pivotal 团队提供的全新框架,旨在简化 Spring 应用的初始搭建和开发过程。本笔记涵盖从基础入门到企业级应用开发的完整内容。
@@ -254,19 +244,82 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 /**
  * SpringBoot 启动类
  * @SpringBootApplication 组合注解,包含:
- * - @SpringBootConfiguration: 标记为配置类
- * - @EnableAutoConfiguration: 启用自动配置
- * - @ComponentScan: 扫描组件
+ * - @SpringBootConfiguration: 标记为配置类(等同于@Configuration)
+ * - @EnableAutoConfiguration: 启用自动配置(根据classpath自动配置Bean)
+ * - @ComponentScan: 扫描组件(扫描当前包及子包下的@Component、@Service、@Controller等)
  */
-@SpringBootApplication
+@SpringBootApplication  // 标记为SpringBoot应用的主配置类
 public class DemoApplication {
 
     public static void main(String[] args) {
         // 启动 SpringBoot 应用
+        // SpringApplication.run()会创建ApplicationContext、扫描Bean、启动内嵌Web服务器
         SpringApplication.run(DemoApplication.class, args);
+        // 输出: Started DemoApplication in 2.5 seconds (JVM running for 3.0)
     }
 }
 ```
+
+> ⚠️ **注意事项**:
+> - **启动类位置**: 必须放在根包下,否则无法扫描到子包的组件
+> - **包结构**: 启动类所在包要包含所有业务代码包
+> - **端口占用**: 默认8080端口,被占用需修改配置
+> - **自动配置**: @EnableAutoConfiguration扫描所有jar的META-INF/spring.factories
+> - **扫描范围**: 默认只扫描启动类所在包及子包
+>
+> ```java
+> // 常见错误:启动类位置不对
+> // com.example.demo.DemoApplication ✅ 正确
+> // com.example.demo.controller.DemoApplication ❌ 错误:无法扫描到其他包
+>
+> // 手动指定扫描包
+> @SpringBootApplication(scanBasePackages = {"com.example.demo", "com.other"})
+> public class DemoApplication {}
+>
+> // 排除自动配置
+> @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+> public class DemoApplication {}  // 不使用数据库时排除数据源配置
+> ```
+>
+> 🎯 **实际应用场景**:
+> ```java
+> // 场景1:自定义启动Banner
+> @SpringBootApplication
+> public class DemoApplication {
+>     public static void main(String[] args) {
+>         SpringApplication app = new SpringApplication(DemoApplication.class);
+>         app.setBannerMode(Banner.Mode.OFF);  // 关闭启动Banner
+>         app.run(args);
+>     }
+> }
+>
+> // 场景2:启动时执行初始化
+> @SpringBootApplication
+> public class DemoApplication implements CommandLineRunner {
+>     public static void main(String[] args) {
+>         SpringApplication.run(DemoApplication.class, args);
+>     }
+>
+>     @Override
+>     public void run(String... args) throws Exception {
+>         System.out.println("应用启动成功,开始初始化...");
+>         // 初始化缓存、加载配置等
+>     }
+> }
+>
+> // 场景3:设置默认配置
+> @SpringBootApplication
+> public class DemoApplication {
+>     public static void main(String[] args) {
+>         SpringApplication app = new SpringApplication(DemoApplication.class);
+>         Properties props = new Properties();
+>         props.setProperty("server.port", "8080");
+>         app.setDefaultProperties(props);
+>         app.run(args);
+>     }
+> }
+> ```
+
 
 #### 2.3.3 创建 Controller
 
@@ -2859,9 +2912,3 @@ docker run -d -p 8080:8080 --name demo demo-app
 
 **最后更新:** 2025-11-03
 **作者:** 前端学习笔记
-
-## 💬 评论交流
-
-有任何问题或建议，欢迎在下方留言交流！
-
-<ValineComment />

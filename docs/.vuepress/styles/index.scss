@@ -365,11 +365,31 @@ html.dark {
 }
 
 // ===== 表格样式 =====
+// 表格容器 - 支持横向滚动
+.table-container {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  -webkit-overflow-scrolling: touch; // iOS 平滑滚动
+
+  // 滚动提示阴影
+  background:
+    linear-gradient(to right, white 30%, rgba(255,255,255,0)),
+    linear-gradient(to right, rgba(255,255,255,0), white 70%) 100% 0,
+    radial-gradient(farthest-side at 0 50%, rgba(0,0,0,.2), rgba(0,0,0,0)),
+    radial-gradient(farthest-side at 100% 50%, rgba(0,0,0,.2), rgba(0,0,0,0)) 100% 0;
+  background-repeat: no-repeat;
+  background-color: white;
+  background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+  background-attachment: local, local, scroll, scroll;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
-  margin: 1.5rem 0;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  min-width: 100%; // 确保表格至少占满容器宽度
+  margin: 0; // 移除外边距，由容器控制
   border-radius: 8px;
   overflow: hidden;
 
@@ -381,10 +401,15 @@ table {
       font-weight: 600;
       padding: 1rem;
       text-align: left;
+      white-space: nowrap; // 防止表头换行
+      min-width: 100px; // 设置最小宽度
+      font-size: 14px;
     }
   }
 
   tbody {
+    background: #ffffff;
+
     tr {
       border-bottom: 1px solid #b3e5fc;
       transition: background 0.3s ease;
@@ -393,19 +418,46 @@ table {
         background: #f0f9ff;
       }
 
+      &:last-child {
+        border-bottom: none;
+      }
+
       td {
         padding: 0.75rem 1rem;
+        white-space: nowrap; // 防止内容换行
+        min-width: 100px; // 设置最小宽度
+        font-size: 14px;
       }
     }
   }
 }
 
-html.dark table {
-  tbody tr {
-    border-bottom-color: #283593;
+// 暗黑模式表格
+html.dark {
+  .table-container {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    background:
+      linear-gradient(to right, #1e293b 30%, rgba(30,41,59,0)),
+      linear-gradient(to right, rgba(30,41,59,0), #1e293b 70%) 100% 0,
+      radial-gradient(farthest-side at 0 50%, rgba(255,255,255,.2), rgba(255,255,255,0)),
+      radial-gradient(farthest-side at 100% 50%, rgba(255,255,255,.2), rgba(255,255,255,0)) 100% 0;
+    background-repeat: no-repeat;
+    background-color: #1e293b;
+    background-size: 40px 100%, 40px 100%, 14px 100%, 14px 100%;
+    background-attachment: local, local, scroll, scroll;
+  }
 
-    &:hover {
-      background: rgba(30, 136, 229, 0.1);
+  table {
+    tbody {
+      background: #1e293b;
+
+      tr {
+        border-bottom-color: #283593;
+
+        &:hover {
+          background: rgba(30, 136, 229, 0.1);
+        }
+      }
     }
   }
 }
@@ -436,6 +488,53 @@ html.dark table {
 
   .feature {
     margin-bottom: 1rem;
+  }
+
+  // 移动端表格优化
+  .theme-default-content {
+    // 为所有表格添加滚动容器
+    table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+
+      // 在移动端减小内边距
+      thead th,
+      tbody td {
+        padding: 0.5rem 0.75rem;
+        font-size: 13px;
+        min-width: 80px;
+      }
+    }
+  }
+
+  // 侧边栏在移动端的优化
+  .sidebar {
+    .sidebar-link {
+      padding-left: 0.75rem !important;
+      font-size: 14px;
+    }
+  }
+
+  // 代码块在移动端的优化
+  div[class*='language-'] {
+    margin: 1rem -1.5rem; // 移动端代码块全宽显示
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}
+
+// 平板设备优化
+@media (max-width: 1024px) and (min-width: 769px) {
+  table {
+    thead th,
+    tbody td {
+      padding: 0.65rem 0.85rem;
+      font-size: 13.5px;
+      min-width: 90px;
+    }
   }
 }
 

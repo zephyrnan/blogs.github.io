@@ -1,12 +1,3 @@
----
-title: CSS 属性速查手册
-date: 2024-01-12
-categories:
-  - 前端
-tags:
-  - CSS
----
-
 # CSS 属性速查手册
 
 本手册按功能分类，列出所有常用的 CSS 属性及其用处，方便快速查找。
@@ -88,6 +79,101 @@ tags:
 | `min-height` | 设置最小高度 | `100px`, `50vh` |
 | `max-height` | 设置最大高度 | `500px`, `80vh` |
 | `box-sizing` | 设置盒模型计算方式 | `content-box`, `border-box` |
+
+> 💡 **box-sizing 详解**:
+> ```css
+> /* content-box（默认值）*/
+> .box1 {
+>   box-sizing: content-box;
+>   width: 300px;           /* 仅内容宽度 */
+>   padding: 20px;
+>   border: 1px solid #000;
+>   /* 实际总宽度 = 300 + 20*2 + 1*2 = 342px */
+> }
+>
+> /* border-box（推荐）*/
+> .box2 {
+>   box-sizing: border-box;
+>   width: 300px;           /* 包含padding和border的总宽度 */
+>   padding: 20px;
+>   border: 1px solid #000;
+>   /* 实际总宽度 = 300px */
+>   /* 内容宽度 = 300 - 20*2 - 1*2 = 258px */
+> }
+> ```
+>
+> ⚠️ **注意事项**:
+> - **默认值问题**: 浏览器默认使用content-box,布局计算复杂
+> - **全局设置**: 推荐在项目开始时全局设置为border-box
+> - **继承性**: box-sizing不继承,需要显式设置
+> - **兼容性**: IE8+支持,使用时加前缀-webkit-box-sizing
+> - **百分比宽度**: border-box配合百分比宽度更容易控制布局
+>
+> ```css
+> /* 常见错误示例 */
+> .wrong {
+>   width: 100%;        /* ❌ 会超出父容器 */
+>   padding: 20px;
+>   border: 1px solid #000;
+> }
+>
+> /* 正确做法 */
+> .correct {
+>   box-sizing: border-box;
+>   width: 100%;        /* ✅ 正好填满父容器 */
+>   padding: 20px;
+>   border: 1px solid #000;
+> }
+>
+> /* 全局推荐设置 */
+> *, *::before, *::after {
+>   box-sizing: border-box;
+> }
+> ```
+>
+> 🎯 **实际应用场景**:
+> ```css
+> /* 场景1:响应式网格布局 */
+> .grid-item {
+>   box-sizing: border-box;
+>   width: 33.333%;  /* 三列布局 */
+>   padding: 15px;   /* 不影响宽度 */
+>   border: 1px solid #ddd;
+>   float: left;
+> }
+>
+> /* 场景2:表单元素统一大小 */
+> input, textarea, button {
+>   box-sizing: border-box;
+>   width: 100%;
+>   padding: 10px;
+>   border: 2px solid #ccc;
+>   /* 所有元素宽度一致 */
+> }
+>
+> /* 场景3:卡片组件 */
+> .card {
+>   box-sizing: border-box;
+>   width: 300px;
+>   padding: 20px;
+>   border: 1px solid #e0e0e0;
+>   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+>   /* 固定宽度,内边距和边框不影响布局 */
+> }
+>
+> /* 场景4:Flexbox容器 */
+> .flex-container {
+>   display: flex;
+>   gap: 20px;
+> }
+>
+> .flex-item {
+>   box-sizing: border-box;
+>   flex: 1;         /* 平分空间 */
+>   padding: 15px;   /* padding不破坏等分 */
+>   border: 2px solid #333;
+> }
+> ```
 
 ### 2. 内边距（Padding）
 
@@ -185,6 +271,166 @@ tags:
 | 属性名 | 用处 | 示例值 |
 |--------|------|--------|
 | `position` | 设置定位方式 | `static`, `relative`, `absolute`, `fixed`, `sticky` |
+
+> 💡 **position 定位详解**:
+> ```css
+> /* static - 静态定位(默认) */
+> .static {
+>   position: static;
+>   /* top/right/bottom/left无效 */
+>   /* 按照正常文档流排列 */
+> }
+>
+> /* relative - 相对定位 */
+> .relative {
+>   position: relative;
+>   top: 20px;     /* 相对原位置向下偏移20px */
+>   left: 30px;    /* 相对原位置向右偏移30px */
+>   /* 元素仍占据原来的空间 */
+>   /* 常用作absolute的定位参照 */
+> }
+>
+> /* absolute - 绝对定位 */
+> .absolute {
+>   position: absolute;
+>   top: 0;        /* 相对最近的已定位祖先元素 */
+>   right: 0;
+>   /* 脱离文档流,不占空间 */
+>   /* 如果没有已定位祖先,相对body定位 */
+> }
+>
+> /* fixed - 固定定位 */
+> .fixed {
+>   position: fixed;
+>   bottom: 20px;  /* 相对浏览器视口 */
+>   right: 20px;
+>   /* 脱离文档流 */
+>   /* 滚动页面时保持固定位置 */
+> }
+>
+> /* sticky - 粘性定位 */
+> .sticky {
+>   position: sticky;
+>   top: 0;        /* 滚动到阈值时固定 */
+>   /* 平时是relative,滚动到阈值后变fixed */
+>   /* 不脱离文档流 */
+> }
+> ```
+>
+> ⚠️ **注意事项**:
+> - **定位参照**: absolute相对最近的已定位(非static)祖先元素
+> - **z-index**: 只对已定位元素(非static)有效
+> - **性能影响**: fixed和absolute会触发重绘,慎用大量定位元素
+> - **sticky兼容性**: IE不支持sticky,需要fallback方案
+> - **脱离文档流**: absolute和fixed会导致父元素高度塌陷
+> - **百分比定位**: 百分比值相对于包含块的尺寸
+>
+> ```css
+> /* 常见错误:父元素没有定位 */
+> .parent {
+>   /* ❌ 没有设置position */
+> }
+> .child {
+>   position: absolute;
+>   top: 0;
+>   /* 会相对body定位,而不是.parent */
+> }
+>
+> /* 正确做法 */
+> .parent {
+>   position: relative;  /* ✅ 设置为定位参照 */
+> }
+> .child {
+>   position: absolute;
+>   top: 0;              /* 现在相对.parent定位 */
+> }
+>
+> /* sticky需要指定阈值 */
+> .sticky-wrong {
+>   position: sticky;  /* ❌ 没有top/bottom值 */
+> }
+> .sticky-correct {
+>   position: sticky;
+>   top: 0;            /* ✅ 指定粘性阈值 */
+> }
+> ```
+>
+> 🎯 **实际应用场景**:
+> ```css
+> /* 场景1:固定导航栏 */
+> .navbar {
+>   position: fixed;
+>   top: 0;
+>   left: 0;
+>   width: 100%;
+>   background: #333;
+>   z-index: 1000;
+>   /* 页面滚动时始终显示 */
+> }
+> body {
+>   padding-top: 60px;  /* 避免内容被导航栏遮挡 */
+> }
+>
+> /* 场景2:模态框/弹窗居中 */
+> .modal-overlay {
+>   position: fixed;
+>   top: 0;
+>   left: 0;
+>   width: 100%;
+>   height: 100%;
+>   background: rgba(0,0,0,0.5);
+>   display: flex;
+>   align-items: center;
+>   justify-content: center;
+>   z-index: 9999;
+> }
+> .modal-content {
+>   position: relative;
+>   background: white;
+>   padding: 20px;
+>   border-radius: 8px;
+> }
+>
+> /* 场景3:角标/徽章 */
+> .icon-container {
+>   position: relative;
+>   display: inline-block;
+> }
+> .badge {
+>   position: absolute;
+>   top: -5px;
+>   right: -5px;
+>   background: red;
+>   color: white;
+>   border-radius: 50%;
+>   padding: 2px 6px;
+>   font-size: 12px;
+> }
+>
+> /* 场景4:粘性表头 */
+> .table-header {
+>   position: sticky;
+>   top: 0;
+>   background: white;
+>   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+>   z-index: 10;
+>   /* 滚动表格时表头保持可见 */
+> }
+>
+> /* 场景5:回到顶部按钮 */
+> .back-to-top {
+>   position: fixed;
+>   bottom: 20px;
+>   right: 20px;
+>   width: 50px;
+>   height: 50px;
+>   background: #007bff;
+>   color: white;
+>   border-radius: 50%;
+>   cursor: pointer;
+>   z-index: 999;
+> }
+> ```
 | `top` | 设置距顶部距离（已定位元素） | `10px`, `50%`, `auto` |
 | `right` | 设置距右边距离 | `10px`, `50%`, `auto` |
 | `bottom` | 设置距底部距离 | `10px`, `50%`, `auto` |
@@ -652,9 +898,3 @@ tags:
 ---
 
 **持续更新中...** 如有遗漏或错误，欢迎补充！
-
-## 💬 评论交流
-
-有任何问题或建议，欢迎在下方留言交流！
-
-<ValineComment />
